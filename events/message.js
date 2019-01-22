@@ -3,8 +3,7 @@ const clc = require("cli-color");
 const updateBL = (bl) => {
     fs.writeFile ("./blacklist.json", JSON.stringify(bl, null, 4), function(err) {
         if (err) throw err;
-        }
-        );
+        });
 }
 
 module.exports.run = async (client, message) => {

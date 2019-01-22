@@ -1,17 +1,16 @@
-const Discord = require("discord.js");
-let clc = require("cli-color")
-let moment = require("moment")
-require("moment-timezone");
-require("moment-duration-format");
 const config = require("../config.json");
 const fs = require("fs")
 const bl = require("../blacklist.json");
 const updateBL = (bl) => {
     fs.writeFile ("./blacklist.json", JSON.stringify(bl, null, 4), function(err) {
         if (err) throw err;
-        }
-        );
-}
+        });
+};
+let clc = require("cli-color");
+let moment = require("moment");
+require("moment-timezone");
+require("moment-duration-format");
+
 
 module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     let prefixDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("prefix").run()

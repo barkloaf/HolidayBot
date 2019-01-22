@@ -2,15 +2,18 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
 const dbFile = require("./db.js");
-client.db = new dbFile();
-client.db.init();
-const fs = require("fs")
+const fs = require("fs");
 const RSSParser = require("rss-parser");
 const moment = require('moment');
-require('moment-timezone');
-require("moment-duration-format")
 const clc = require("cli-color");
 const bl = require("./blacklist.json");
+
+require('moment-timezone');
+require("moment-duration-format");
+
+client.db = new dbFile();
+client.db.init();
+
 client.cmdHook = new Discord.WebhookClient(config.whID, config.whToken);
 client.commands = new Discord.Collection();
 let tzArray = moment.tz.names()
