@@ -16,7 +16,7 @@ client.db.init();
 
 client.cmdHook = new Discord.WebhookClient(config.whID, config.whToken);
 client.commands = new Discord.Collection();
-let tzArray = moment.tz.names()
+let tzArray = moment.tz.names();
 const cron = require('node-cron');
 var log = console.log;
 
@@ -24,7 +24,7 @@ fs.readdir("./commands/", (err, files) => {
     if (err) console.error(err)
     files.forEach(file => {
         if (!file.endsWith(".js")) return;
-        let cmdFunction = require(`./commands/${file}`)
+        let cmdFunction = require(`./commands/${file}`);
         client.commands.set(cmdFunction.help.name, cmdFunction);
     });
 });
@@ -36,7 +36,7 @@ fs.readdir("./events/", (err, files) => {
         let eventFunc = require(`./events/${file}`);
         let eventName = file.split(".")[0];
 
-        client.on(eventName, (...args) => eventFunc.run(client, ...args))
+        client.on(eventName, (...args) => eventFunc.run(client, ...args));
     });
 });
 
@@ -70,14 +70,14 @@ for(let tz of tzArray) {
         let scheduleWait = require("util").promisify(setTimeout);
         for(let guild of client.guilds.array()) {
             let wait = require("util").promisify(setTimeout);
-            let regionDBResult = await client.db.r.table("guilds").get(guild.id).getField("region").run()
-            let dailyDBResult = await client.db.r.table("guilds").get(guild.id).getField("daily").run()
-            let adultDBResult = await client.db.r.table("guilds").get(guild.id).getField("adult").run()
-            let dailyChannelDBResult = await client.db.r.table("guilds").get(guild.id).getField("dailyChannel").run()
+            let regionDBResult = await client.db.r.table("guilds").get(guild.id).getField("region").run();
+            let dailyDBResult = await client.db.r.table("guilds").get(guild.id).getField("daily").run();
+            let adultDBResult = await client.db.r.table("guilds").get(guild.id).getField("adult").run();
+            let dailyChannelDBResult = await client.db.r.table("guilds").get(guild.id).getField("dailyChannel").run();
             if(regionDBResult === tz && dailyDBResult === true && adultDBResult === false) {
-                let items = ""
+                let items = "";
                 parser.parseURL(`https://www.checkiday.com/rss.php?tz=${tz}`, function(err, feed) {
-                    feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")
+                    feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "");
                     client.channels.get(`${dailyChannelDBResult}`).send({embed: {
                         color: 0x3a1cbb,
                         author: {
@@ -97,9 +97,9 @@ for(let tz of tzArray) {
                     }});
                 });
             } else if(regionDBResult === tz && dailyDBResult === true && adultDBResult === true) {
-                let items = ""
+                let items = "";
                 parser.parseURL(`https://www.checkiday.com/rss.php?tz=${tz}&adult=true`, function(err, feed) {
-                    feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")
+                    feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "");
                     client.channels.get(`${dailyChannelDBResult}`).send({embed: {
                         color: 0x3a1cbb,
                         author: {
@@ -120,9 +120,8 @@ for(let tz of tzArray) {
                 });
             } else continue;
             console.log("[" + clc.green("SUCC") + "] " + `Daily Posted in "${guild.name}" (ID: ${guild.id})`);
-            client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `Daily Posted in in __${guild.name}__ (ID: ${guild.id})`)
+            client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `Daily Posted in in __${guild.name}__ (ID: ${guild.id})`);
             await wait(5000);
-
             continue;
         }
         await scheduleWait(5000);
