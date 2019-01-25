@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
-let clc = require("cli-color")
-let moment = require("moment")
+const config = require("../config.json");
+let clc = require("cli-color");
+let moment = require("moment");
 require("moment-timezone");
 require("moment-duration-format");
-const config = require("../config.json");
 
 module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     if(message.author.id === config.ownerID) {

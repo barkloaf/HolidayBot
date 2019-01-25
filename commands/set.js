@@ -1,5 +1,5 @@
 let clc = require("cli-color");
-let moment = require("moment")
+let moment = require("moment");
 require("moment-timezone");
 require("moment-duration-format");
 const config = require("../config.json");
@@ -27,44 +27,62 @@ const getDefaultRegion = (guild) => {
     var defaultRegion = "";
     //brazil, us-west, japan, singapore, eu-central, hongkong, us-south, southafrica, us-central, london, us-east, sydney, eu-west, amsterdam, frankfurt, russia
 
-    if(guild.region === "brazil") {
-        defaultRegion = "America/Sao_Paulo";
-    } else if(guild.region === "us-west") {
-        defaultRegion = "America/Los_Angeles";
-    } else if(guild.region === "japan") {
-        defaultRegion = "Asia/Tokyo";
-    } else if(guild.region === "singapore") {
-        defaultRegion = "Asia/Singapore";
-    } else if(guild.region === "eu-central") {
-        defaultRegion = "Europe/Berlin";
-    } else if(guild.region === "hongkong") {
-        defaultRegion = "Asia/Hong_Kong";
-    } else if(guild.region === "us-south") {
-        defaultRegion = "America/Chicago";
-    } else if(guild.region === "southafrica") {
-        defaultRegion = "Africa/Johannesburg";
-    } else if(guild.region === "us-central") {
-        defaultRegion = "America/Chicago";
-    } else if(guild.region === "london") {
-        defaultRegion = "Europe/London";
-    } else if(guild.region === "us-east") {
-        defaultRegion = "America/Toronto";
-    } else if(guild.region === "sydney") {
-        defaultRegion = "Australia/Sydney";
-    } else if(guild.region === "eu-west") {
-        defaultRegion = "Europe/Paris";
-    } else if(guild.region === "amsterdam") {
-        defaultRegion = "Europe/Amsterdam";
-    } else if(guild.region === "frankfurt") {
-        defaultRegion = "Europe/Berlin";
-    } else if(guild.region === "russia") {
-        defaultRegion = "Europe/Moscow";
-    } else {
-        defaultRegion = "UTC";
-    }
+    switch(guild.region) {
+        case "brazil":
+            defaultRegion = "America/Sao_Paulo";
+            break;
+        case "us-west":
+            defaultRegion = "America/Los_Angeles";
+            break;
+        case "japan":
+            defaultRegion = "Asia/Tokyo";
+            break;
+        case "singapore":
+            defaultRegion = "Asia/Singapore";
+            break;
+        case "eu-central":
+            defaultRegion = "Europe/Berlin";
+            break;
+        case "hongkong":
+            defaultRegion = "Asia/Hong_Kong";
+            break;
+        case "us-south":
+            defaultRegion = "America/Chicago";
+            break;
+        case "southafrica":
+            defaultRegion = "Africa/Johannesburg";
+            break;
+        case "us-central":
+            defaultRegion = "America/Chicago";
+            break;
+        case "london":
+            defaultRegion = "Europe/London";
+            break;
+        case "us-east":
+            defaultRegion = "America/Toronto";
+            break;
+        case "sydney":
+            defaultRegion = "Australia/Sydney";
+            break;
+        case "eu-west":
+            defaultRegion = "Europe/Paris";
+            break;
+        case "amsterdam":
+            defaultRegion = "Europe/Amsterdam";
+            break;
+        case "frankfurt":
+            defaultRegion = "Europe/Berlin";
+            break;
+        case "russia":
+            defaultRegion = "Europe/Moscow";
+            break;
+        default:
+            defaultRegion = "UTC";
+            break;
+    };
 
     return defaultRegion;
-}
+};
 
 module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     if(message.member.permissions.has("MANAGE_GUILD") || message.author.id === config.ownerID) {
@@ -185,6 +203,23 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
         } else if(prop === "dailyChannel") {
             const [prop, ...ignored] = args;
             let nDC = message.mentions.channels.first()
+            if(!nDC.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
+                console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
+                cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+                return message.channel.send({embed: {
+                    color: 0xc6373e,
+                    author: {
+                      name: client.user.username,
+                      icon_url: client.user.displayAvatarURL
+                    },
+                    title: "Error!",
+                    description: "No permission to send messages in mentioned channel.",
+                    footer: {
+                        icon_url: message.author.displayAvatarURL,
+                        text: message.author.username
+                    }
+                }})};
+
             client.db.updateDailyChannel(message.guild.id, nDC.id)
 
         } else if(prop === "reset") {
@@ -194,7 +229,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
             client.db.updateRegion(message.guild.id, getDefaultRegion(message.guild));
             client.db.updateAdult(message.guild.id, false);
             client.db.updateDaily(message.guild.id, true);
-            client.db.updateDailyChannel(message.guild.id, getDefaultChannel(message.guild));
+            client.db.updateDailyChannel(message.guild.id, getDefaultChannel(message.guild).id);
             client.db.updateCommand(message.guild.id, true);
 
         } else {

@@ -10,7 +10,7 @@ Default prefix is `h]`
 * `ping` - Pong!
 * `stats` - Shows bot statistics like uptime, lib versions, etc.
 * `h [region]` - Displays holidays in the specified region or server region on command (if enabled)
-* `set` -
+* `set` - Sets server-specific settings (Manage Server permission required)
     * `set prefix <desiredPrefix>` - Changes the prefix used on this server (default: `h]`)
     * `set region <desiredRegion>` - Changes the region to any valid tz/zoneinfo database region. See list here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. This is used for the daily posting region, as well as the default region used when `h [region]` is run. By default, this will be the timezone associated with the server region.
     * `set adult <on|off>` - Enables/disables content that may not be safe for viewing by children (default: `off`/`false`)

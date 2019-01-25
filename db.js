@@ -1,7 +1,7 @@
 const getDefaultChannel = (guild) => {
     // get "original" default channel
     if(guild.channels.has(guild.id))
-      return guild.channels.get(message.guild.id)
+      return guild.channels.get(guild.id);
   
     // Check for a "general" channel, which is often default chat
     const generalChannel = guild.channels.find(channel => channel.name === "general");
@@ -21,47 +21,64 @@ const getDefaultRegion = (guild) => {
     var defaultRegion = "";
     //brazil, us-west, japan, singapore, eu-central, hongkong, us-south, southafrica, us-central, london, us-east, sydney, eu-west, amsterdam, frankfurt, russia
 
-    if(guild.region === "brazil") {
-        defaultRegion = "America/Sao_Paulo";
-    } else if(guild.region === "us-west") {
-        defaultRegion = "America/Los_Angeles";
-    } else if(guild.region === "japan") {
-        defaultRegion = "Asia/Tokyo";
-    } else if(guild.region === "singapore") {
-        defaultRegion = "Asia/Singapore";
-    } else if(guild.region === "eu-central") {
-        defaultRegion = "Europe/Berlin";
-    } else if(guild.region === "hongkong") {
-        defaultRegion = "Asia/Hong_Kong";
-    } else if(guild.region === "us-south") {
-        defaultRegion = "America/Chicago";
-    } else if(guild.region === "southafrica") {
-        defaultRegion = "Africa/Johannesburg";
-    } else if(guild.region === "us-central") {
-        defaultRegion = "America/Chicago";
-    } else if(guild.region === "london") {
-        defaultRegion = "Europe/London";
-    } else if(guild.region === "us-east") {
-        defaultRegion = "America/Toronto";
-    } else if(guild.region === "sydney") {
-        defaultRegion = "Australia/Sydney";
-    } else if(guild.region === "eu-west") {
-        defaultRegion = "Europe/Paris";
-    } else if(guild.region === "amsterdam") {
-        defaultRegion = "Europe/Amsterdam";
-    } else if(guild.region === "frankfurt") {
-        defaultRegion = "Europe/Berlin";
-    } else if(guild.region === "russia") {
-        defaultRegion = "Europe/Moscow";
-    } else {
-        defaultRegion = "UTC";
-    }
+    switch(guild.region) {
+        case "brazil":
+            defaultRegion = "America/Sao_Paulo";
+            break;
+        case "us-west":
+            defaultRegion = "America/Los_Angeles";
+            break;
+        case "japan":
+            defaultRegion = "Asia/Tokyo";
+            break;
+        case "singapore":
+            defaultRegion = "Asia/Singapore";
+            break;
+        case "eu-central":
+            defaultRegion = "Europe/Berlin";
+            break;
+        case "hongkong":
+            defaultRegion = "Asia/Hong_Kong";
+            break;
+        case "us-south":
+            defaultRegion = "America/Chicago";
+            break;
+        case "southafrica":
+            defaultRegion = "Africa/Johannesburg";
+            break;
+        case "us-central":
+            defaultRegion = "America/Chicago";
+            break;
+        case "london":
+            defaultRegion = "Europe/London";
+            break;
+        case "us-east":
+            defaultRegion = "America/Toronto";
+            break;
+        case "sydney":
+            defaultRegion = "Australia/Sydney";
+            break;
+        case "eu-west":
+            defaultRegion = "Europe/Paris";
+            break;
+        case "amsterdam":
+            defaultRegion = "Europe/Amsterdam";
+            break;
+        case "frankfurt":
+            defaultRegion = "Europe/Berlin";
+            break;
+        case "russia":
+            defaultRegion = "Europe/Moscow";
+            break;
+        default:
+            defaultRegion = "UTC";
+            break;
+    };
 
     return defaultRegion;
-}
+};
 
-
-const rethink = require("rethinkdbdash")
+const rethink = require("rethinkdbdash");
 
 module.exports = class { 
     constructor() {
@@ -70,16 +87,17 @@ module.exports = class {
         })
     }
     init() {
+        if(this.r.table("guilds")) return;
         return this.r.tableCreate('guilds').run() 
             .then(() => console.log("Guild and settings table created."))
             .catch((e) => {
                 if (e.name === "ReqlOpFailedError") {
-                } else {
-                    console.error(`There was an unexpected error with the database. ${e}. Exiting. Please ignore all the text spammed at the start of console`)
-                    process.exit(1)
+                } {
+                    console.error(`There was an unexpected error with the database. ${e}. Exiting. Please ignore all the text spammed at the start of console`);
+                    process.exit(1);
                 }
             });
-    }
+    } 
     createGuild(guild) {
         return this.r.table('guilds').insert([{
             id: guild.id,
