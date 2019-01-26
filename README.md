@@ -1,6 +1,6 @@
 # HolidayBot
 A discord bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
-[Invite](https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot)
+#### [Invite](https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot)
 
 ## Commands list
 Default prefix is `h]`
