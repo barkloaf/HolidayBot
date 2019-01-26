@@ -92,7 +92,7 @@ module.exports = class {
             .then(() => console.log("Guild and settings table created."))
             .catch((e) => {
                 if (e.name === "ReqlOpFailedError") {
-                } {
+                } else {
                     console.error(`There was an unexpected error with the database. ${e}. Exiting. Please ignore all the text spammed at the start of console`);
                     process.exit(1);
                 }

@@ -1,5 +1,6 @@
 # HolidayBot
 A discord bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
+[Invite](https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot)
 
 ## Commands list
 Default prefix is `h]`
@@ -12,7 +13,7 @@ Default prefix is `h]`
 * `h [region]` - Displays holidays in the specified region or server region on command (if enabled)
 * `set` - Sets server-specific settings (Manage Server permission required)
     * `set prefix <desiredPrefix>` - Changes the prefix used on this server (default: `h]`)
-    * `set region <desiredRegion>` - Changes the region to any valid tz/zoneinfo database region. See list here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. This is used for the daily posting region, as well as the default region used when `h [region]` is run. By default, this will be the timezone associated with the server region.
+    * `set region <desiredRegion>` - Changes the region to any valid tz/zoneinfo database region. See list [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). This is used for the daily posting region, as well as the default region used when `h [region]` is run. By default, this will be the timezone associated with the server region.
     * `set adult <on|off>` - Enables/disables content that may not be safe for viewing by children (default: `off`/`false`)
     * `set daily <on|off>` - Enables/disables the bot posting new holidays every midnight in the set region (default: `on`/`true`)
     * `set dailyChannel <channelTag>` - Sets the channel the daily holidays (if enabled) will be posted in. By default, this will either be any channel named `general` or the first channel the bot is able to send messages in.
