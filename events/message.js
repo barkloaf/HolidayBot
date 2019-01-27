@@ -46,22 +46,6 @@ module.exports.run = async (client, message) => {
     const roCMD = message.content.slice(prefixDBResult.length + botCommand.length + 1)
 
     const cmd = client.commands.get(botCommand)
-    if (!cmd) {
-        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("SYN") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-        client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "SYN" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
-        return message.channel.send({embed: {
-            color: 0xc6373e,
-            author: {
-            name: client.user.username,
-            icon_url: client.user.displayAvatarURL
-            },
-            title: "Error!",
-            description: "Command not recognized. Run `help` for help.",
-            footer: {
-                icon_url: message.author.displayAvatarURL,
-                text: message.author.username
-            }
-        }});
-    }
+    if (!cmd) return
     cmd.run(client, message, args, client.cmdHook, roCMD)
 };
