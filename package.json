@@ -17,7 +17,7 @@
     "moment": "^2.23.0",
     "moment-duration-format": "^2.2.2",
     "moment-timezone": "^0.5.23",
-    "node-cron": "^2.0.3",
+    "node-cron": "barkloaf/node-cron",
     "rethinkdbdash": "^2.3.31",
     "rss-parser": "^3.5.2"
   }
