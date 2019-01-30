@@ -200,7 +200,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
             }
 
             // Daily Posting Channel setting
-        } else if(prop === "dailyChannel") {
+        } else if(prop === "dailyChannel" || prop === "dailychannel") {
             const [prop, ...ignored] = args;
             let nDC = message.mentions.channels.first()
             if(!nDC.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
