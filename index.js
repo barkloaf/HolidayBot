@@ -138,8 +138,8 @@ for(let tz of tzArray) {
                     }});
                 });
             } else continue;
-            console.log("[" + clc.green("SUCC") + "] " + `Daily Posted in "${guild.name}" (ID: ${guild.id})`);
-            client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `Daily Posted in \`${guild.name}\` (ID: ${guild.id})`);
+            console.log("[" + clc.green("SUCC") + "] " + `Daily Posted in "${guild.name}" (ID: ${guild.id}) (tz: ${tz})`);
+            client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `Daily Posted in \`${guild.name}\` (ID: ${guild.id}) (tz: __${tz}__)`);
             await wait(5000);
             continue;
         }

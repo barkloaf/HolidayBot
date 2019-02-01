@@ -29,6 +29,10 @@ module.exports.run = async (client,  message, args, cmdHook, roCMD) => {
             value: process.version
         },
         {
+            name: "Memory Usage",
+            value: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MiB`
+        },
+        {
             name: "Uptime",
             value: `${moment.duration(client.uptime).format("D [days], H [hrs], m [mins], s [secs]")}`
         }
