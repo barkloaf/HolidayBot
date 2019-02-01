@@ -12,7 +12,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     .setDescription("I am a bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from [checkiday.com](https://checkiday.com)")
     .setFooter(message.author.username, message.author.avatarURL)
     .setThumbnail(client.user.displayAvatarURL)
-    .addField("Check out the source", "[GitHub](https://github.com/barkloaf/HolidayBot)")
+    .addField("Check out the source and invite link", "[GitHub](https://github.com/barkloaf/HolidayBot)")
     .addField("Feedback?",
         "Feel free to contact the bot owner, \n`barkloaf#6564` | `219117197178568708` :3")
 
