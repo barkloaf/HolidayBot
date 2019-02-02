@@ -14,7 +14,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     .setThumbnail(client.user.displayAvatarURL)
     .addField("Check out the source and invite link", "[GitHub](https://github.com/barkloaf/HolidayBot)")
     .addField("Feedback?",
-        "Feel free to contact the bot owner, \n`barkloaf#6564` | `219117197178568708` :3")
+        "Feel free to contact the bot owner, <@219117197178568708> :3")
 
     message.channel.send({embed});
 
