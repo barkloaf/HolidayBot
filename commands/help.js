@@ -22,7 +22,7 @@ module.exports.run = async = (client, message, args, cmdHook, roCMD) => {
             },
             {
                 name: "`about`",
-                value: "Shows information about the bot (purpose, author, etc.)"
+                value: "Shows information about the bot (invite, source, purpose, author, etc.)"
             },
             {
                 name: "`settings`",
