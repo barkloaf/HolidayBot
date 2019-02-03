@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 let clc = require("cli-color");
+const config = require("../config.json");
 let moment = require("moment");
 require("moment-timezone");
 require("moment-duration-format");
@@ -14,7 +15,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     .setThumbnail(client.user.displayAvatarURL)
     .addField("Check out the source and invite link", "[GitHub](https://github.com/barkloaf/HolidayBot)")
     .addField("Feedback?",
-        "Feel free to contact the bot owner, <@219117197178568708> :3")
+        `Feel free to contact the bot owner, <@${config.ownerID}> :3`)
 
     message.channel.send({embed});
 

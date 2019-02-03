@@ -1,5 +1,6 @@
 const bl = require("../blacklist.json");
 const clc = require("cli-color");
+const config = require("../config.json");
 const moment = require('moment');
 require('moment-timezone');
 require("moment-duration-format");
@@ -29,7 +30,7 @@ module.exports.run = async (client, message) => {
             icon_url: client.user.displayAvatarURL
             },
             title: "You have been blacklisted!",
-            description: "If you feel this is an error, please contact the bot owner, <@219117197178568708>",
+            description: `If you feel this is an error, please contact the bot owner, <@${config.ownerID}>`,
             fields: [{
                 name: "Reason:",
                 value: "`" + `${bl[message.author.id]["reason"]}` + "`"
