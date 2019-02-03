@@ -29,7 +29,7 @@ module.exports.run = async (client, message) => {
             icon_url: client.user.displayAvatarURL
             },
             title: "You have been blacklisted!",
-            description: "If you feel this is an error, please contact the bot owner \n`barkloaf#6564` | `219117197178568708`",
+            description: "If you feel this is an error, please contact the bot owner, <@219117197178568708>",
             fields: [{
                 name: "Reason:",
                 value: "`" + `${bl[message.author.id]["reason"]}` + "`"
