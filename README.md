@@ -28,5 +28,5 @@ Default prefix is `h]`
 
 
 ## Disclaimer
-Holidays listed are largely US and international only. This is nothing I can really control, as there lacks a good holiday database I can use like this. However, every holiday listed is legally recognized by SOMEONE.
+Holidays listed are largely US and international only, no matter which region the holidays are displayed in, only the timezone makes the difference. This is nothing I can really control, as there lacks a good holiday database I can use like this. However, every holiday listed is legally recognized by SOMEONE.
 #### But hey, the world is so globalized now, does it really matter?
