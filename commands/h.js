@@ -45,11 +45,27 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
 
         var cmdURL = `https://www.checkiday.com/rss.php?tz=${cmdRegion}${adultURL}`;
         
-
         let items = "";
         let parser = new RSSParser();
         parser.parseURL(cmdURL, function(err, feed) {
-            feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")
+            try {feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")}
+            catch (error) {
+                console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
+                cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+                return message.channel.send({embed: {
+                    color: 0xc6373e,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.displayAvatarURL
+                    },
+                    title: "Error!",
+                    description: "There was an error gathering the feed from [Checkiday](https://checkiday.com) (This is most likely their fault!)",
+                    footer: {
+                        icon_url: message.author.displayAvatarURL,
+                        text: message.author.username
+                    }
+                }});
+            }
             message.channel.send({embed: {
                 color: 0x10525C,
                 author: {

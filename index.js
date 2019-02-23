@@ -118,24 +118,43 @@ for(let tz of tzArray) {
                 };
                 let items = "";
                 parser.parseURL(`https://www.checkiday.com/rss.php?tz=${tz}${dailyAdult}`, function(err, feed) {
-                    feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "");
-                    client.channels.get(`${dailyChannelDBResult}`).send({embed: {
-                        color: 0x3a1cbb,
-                        author: {
-                            name: client.user.username,
-                            icon_url: client.user.displayAvatarURL
-                        },
-                        title: `Today's Holidays in region ${tz}`,
-                        url: "https://checkiday.com",
-                        fields: [{
-                            name: `${feed.pubDate}`.slice(0, 16),
-                            value: items
-                        }],
-                        footer: {
-                            icon_url: client.user.displayAvatarURL,
-                            text: "HolidayBot Daily Posting"
-                        }
-                    }});
+                    try {feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")}
+                    catch (err) {}
+                    if(items === "") {
+                        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `Attempted to daily post in "${guild.name}" but there was a feed error.`);
+                        client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `Attempted to daily post in \`${guild.name}\` but there was a feed error.`)
+                        client.channels.get(`${dailyChannelDBResult}`).send({embed: {
+                            color: 0xc6373e,
+                            author: {
+                                name: client.user.username,
+                                icon_url: client.user.displayAvatarURL
+                            },
+                            title: "Error!",
+                            description: `There was an error gathering the feed from [Checkiday](https://checkiday.com) (This is most likely their fault!)`,
+                            footer: {
+                                icon_url: client.user.displayAvatarURL,
+                                text: "HolidayBot Daily Posting"
+                            }
+                        }});
+                    } else {
+                        client.channels.get(`${dailyChannelDBResult}`).send({embed: {
+                            color: 0x3a1cbb,
+                            author: {
+                                name: client.user.username,
+                                icon_url: client.user.displayAvatarURL
+                            },
+                            title: `Today's Holidays in region ${tz}`,
+                            url: "https://checkiday.com",
+                            fields: [{
+                                name: `${feed.pubDate}`.slice(0, 16),
+                                value: items
+                            }],
+                            footer: {
+                                icon_url: client.user.displayAvatarURL,
+                                text: "HolidayBot Daily Posting"
+                            }
+                        }});
+                    }
                 });
             } else continue;
             console.log("[" + clc.green("SUCC") + "] " + `Daily Posted in "${guild.name}" (ID: ${guild.id}) (tz: ${tz})`);
