@@ -276,7 +276,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
               icon_url: client.user.displayAvatarURL
             },
             title: "Error!",
-            description: "Manage Server permmission required for `set`.",
+            description: "Manage Server permission required for `set`.",
             footer: {
                 icon_url: message.author.displayAvatarURL,
                 text: message.author.username
