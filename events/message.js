@@ -9,6 +9,24 @@ const updateBL = (bl) => {
         if (err) throw err;
         });
 }
+const getDefaultChannel = (guild) => {
+    // get "original" default channel
+    if(guild.channels.has(guild.id))
+      return guild.channels.get(guild.id);
+  
+    // Check for a "general" channel, which is often default chat
+    const generalChannel = guild.channels.find(channel => channel.name === "general");
+    if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
+      return generalChannel;
+    // Now we get into the heavy stuff: first channel in order where the bot can speak
+    // hold on to your hats!
+    return guild.channels
+     .filter(c => c.type === "text" &&
+       c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
+     .sort((a, b) => a.position - b.position ||
+       Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber())
+     .first();
+  }
 
 module.exports.run = async (client, message) => {
     if(!message.guild) return;
@@ -48,5 +66,12 @@ module.exports.run = async (client, message) => {
 
     const cmd = client.commands.get(botCommand)
     if (!cmd) return
+    if(!message.channel.permissionsFor(message.guild.client.user).has("EMBED_LINKS") || !message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES")) {
+        if(!message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES")){
+            client.channels.get(`${getDefaultChannel(message.guild).id}`).send("I need permission to send messages and embed links!");
+        } else message.channel.send("I need permission to embed links here!");
+        return;
+    }
+
     cmd.run(client, message, args, client.cmdHook, roCMD)
 };

@@ -19,7 +19,6 @@
     "moment-timezone": "^0.5.23",
     "node-cron": "^2.0.3",
     "rethinkdbdash": "^2.3.31",
-    "rss-parser": "^3.5.2",
-    "tz-offset": "spotlightishere/tz-offset"
+    "rss-parser": "^3.5.2"
   }
 }

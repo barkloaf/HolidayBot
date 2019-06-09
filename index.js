@@ -68,13 +68,13 @@ const getDefaultChannel = (guild) => {
   
     // Check for a "general" channel, which is often default chat
     const generalChannel = guild.channels.find(channel => channel.name === "general");
-    if (generalChannel)
+    if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
       return generalChannel;
     // Now we get into the heavy stuff: first channel in order where the bot can speak
     // hold on to your hats!
     return guild.channels
      .filter(c => c.type === "text" &&
-       c.permissionsFor(guild.client.user).has("SEND_MESSAGES"))
+       c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
      .sort((a, b) => a.position - b.position ||
        Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber())
      .first();
@@ -98,7 +98,7 @@ for(let tz of tzArray) {
                 dailyAdult = "&adult=true"
             }
             if(regionDBResult === tz && dailyDBResult === true) {
-                if(!dailyCObj.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                if(!dailyCObj.permissionsFor(guild.me).has("SEND_MESSAGES") && !dailyCObj.permissionsFor(guild.me).has("EMBED_LINKS")) {
                     console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `Attempted to daily post in "${guild.name}" but permission was revoked.`);
                     client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `Attempted to daily post in \`${guild.name}\` but permission was revoked.`)
                     client.channels.get(`${getDefaultChannel(guild).id}`).send({embed: {
@@ -108,7 +108,7 @@ for(let tz of tzArray) {
                           icon_url: client.user.displayAvatarURL
                         },
                         title: "Error!",
-                        description: `Attempted to daily post in <#${dailyChannelDBResult}>, but permission to send messages was revoked.`,
+                        description: `Attempted to daily post in <#${dailyChannelDBResult}>, but permission to send messages and/or embeds was revoked.`,
                         footer: {
                             icon_url: client.user.displayAvatarURL,
                             text: "HolidayBot Daily Posting"
