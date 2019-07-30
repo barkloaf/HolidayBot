@@ -4,17 +4,11 @@ require("moment-timezone");
 require("moment-duration-format");
 const RSSParser = require("rss-parser");
 
-module.exports.run = async (client, message, args, cmdHook, roCMD) => {
-    let prefixDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("prefix").run()
-    let regionDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("region").run()
-    let adultDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("adult").run()
-    let dailyDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("daily").run()
-    let dailyChannelDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("dailyChannel").run()
-    let commandDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("command").run()
+module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => {
 
     let [cmdRegion, ...ignored] = args;
 
-    if(commandDBResult === false && message.author.id !== config.ownerID) {
+    if(DBResult.command === false && message.author.id !== config.ownerID) {
         console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
         cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
         return message.channel.send({embed: {
@@ -33,11 +27,11 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     }
 
     if(cmdRegion === undefined){
-        cmdRegion = regionDBResult
+        cmdRegion = DBResult.region
     }
 
     if(moment.tz.zone(`${cmdRegion}`)) {
-        if(adultDBResult === true){
+        if(DBResult.adult === true){
             adultURL = "&adult=true";
         } else {
             adultURL = "";

@@ -26,9 +26,8 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
                 }
             }});
         }
-        let reason = message.content.slice(`${DBResult.prefix}`.length + "blacklist".length + 1 + `${blacklisteeID}`.length + 1)
 
-        client.bl.blacklist(blacklisteeID, reason)
+        client.bl.unBlacklist(blacklisteeID)
 
         message.channel.send({embed: {
             color: 1069660,
@@ -36,7 +35,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
                 name: "HolidayBot",
                 icon_url: client.user.displayAvatarURL
             },
-            title: `Successfully blacklisted ${client.users.get(`${blacklisteeID}`).tag} (${blacklisteeID})!`,
+            title: `Successfully unblacklisted ${client.users.get(`${blacklisteeID}`).tag} (${blacklisteeID})!`,
             footer: {
                 icon_url: message.author.displayAvatarURL,
                 text: message.author.username
@@ -53,7 +52,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
               icon_url: client.user.displayAvatarURL
             },
             title: "Error!",
-            description: "You do not have permission to run `blacklist`",
+            description: "You do not have permission to run `unblacklist`",
             footer: {
                 icon_url: message.author.displayAvatarURL,
                 text: message.author.username
@@ -65,5 +64,5 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
 };
 
 module.exports.help = {
-    name: "blacklist"
+    name: "unblacklist"
 }

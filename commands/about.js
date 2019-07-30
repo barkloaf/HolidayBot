@@ -5,7 +5,7 @@ let moment = require("moment");
 require("moment-timezone");
 require("moment-duration-format");
 
-module.exports.run = async (client, message, args, cmdHook, roCMD) => {
+module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => {
     const embed = new Discord.RichEmbed()
     .setTitle("Hello, my name is HolidayBot!")
     .setAuthor("HolidayBot", `${client.user.displayAvatarURL}`)

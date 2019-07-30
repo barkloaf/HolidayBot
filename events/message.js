@@ -1,25 +1,17 @@
-const bl = require("../blacklist.json");
 const clc = require("cli-color");
 const config = require("../config.json");
 const moment = require('moment');
 require('moment-timezone');
 require("moment-duration-format");
-const updateBL = (bl) => {
-    fs.writeFile ("./blacklist.json", JSON.stringify(bl, null, 4), function(err) {
-        if (err) throw err;
-        });
-}
+
 const getDefaultChannel = (guild) => {
-    // get "original" default channel
     if(guild.channels.has(guild.id))
-      return guild.channels.get(guild.id);
+      return guild.channels.get(message.guild.id)
   
-    // Check for a "general" channel, which is often default chat
     const generalChannel = guild.channels.find(channel => channel.name === "general");
     if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
       return generalChannel;
-    // Now we get into the heavy stuff: first channel in order where the bot can speak
-    // hold on to your hats!
+
     return guild.channels
      .filter(c => c.type === "text" &&
        c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
@@ -31,14 +23,24 @@ const getDefaultChannel = (guild) => {
 module.exports.run = async (client, message) => {
     if(!message.guild) return;
     if(message.author.bot) return;
-    let prefixDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("prefix").run()
-    if(message.content.indexOf(prefixDBResult) !== 0) return;
+    let DBResult = await client.db.r.table("guilds").get(message.guild.id).run();
+    let BLResult = await client.bl.r.table("blacklist").get(message.author.id).run();
+    if(message.content.indexOf(DBResult.prefix) !== 0) return;
 
-    if(bl[message.author.id] !== undefined) {
-        if(message.author.tag !== bl[message.author.id]["tag"]) {
-            bl[message.author.id]["tag"] = message.author.tag;
-            updateBL(bl);
-        }
+    const args = message.content.split(/\s+/g);
+    const botCommand = args.shift().slice(`${DBResult.prefix}`.length).toLowerCase();
+    const roCMD = message.content.slice(`${DBResult.prefix}`.length + botCommand.length + 1)
+    let dailyCObj = client.channels.get(`${DBResult.dailyChannel}`);
+
+    const cmd = client.commands.get(botCommand)
+    if (!cmd) return
+    if(message.channel.permissionsFor(message.guild.client.user).has("EMBED_LINKS") === false || message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES") === false) {
+        if(message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES") === false){
+            message.author.send("I need permission to send messages and/or embed links!");
+        } else message.channel.send("I need permission to embed links here!");
+        return;
+    }
+    if(BLResult) {
         console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("BL") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
         client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "BL" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
         return message.channel.send({embed: {
@@ -51,7 +53,7 @@ module.exports.run = async (client, message) => {
             description: `If you feel this is an error, please contact the bot owner, <@${config.ownerID}>`,
             fields: [{
                 name: "Reason:",
-                value: "`" + `${bl[message.author.id]["reason"]}` + "`"
+                value: "`" + `${BLResult.reason}` + "`"
             }],
             footer: {
                 icon_url: message.author.displayAvatarURL,
@@ -60,18 +62,11 @@ module.exports.run = async (client, message) => {
         }});
     }
 
-    const args = message.content.split(/\s+/g);
-    const botCommand = args.shift().slice(prefixDBResult.length).toLowerCase();
-    const roCMD = message.content.slice(prefixDBResult.length + botCommand.length + 1)
+    cmd.run(client, message, args, client.cmdHook, roCMD, DBResult)
 
-    const cmd = client.commands.get(botCommand)
-    if (!cmd) return
-    if(!message.channel.permissionsFor(message.guild.client.user).has("EMBED_LINKS") || !message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES")) {
-        if(!message.channel.permissionsFor(message.guild.client.user).has("SEND_MESSAGES")){
-            client.channels.get(`${getDefaultChannel(message.guild).id}`).send("I need permission to send messages and embed links!");
-        } else message.channel.send("I need permission to embed links here!");
-        return;
+    if(DBResult.daily === true) {
+      if(dailyCObj.permissionsFor(message.guild.me).has("SEND_MESSAGES") === false || dailyCObj.permissionsFor(message.guild.me).has("EMBED_LINKS") === false) {
+        message.channel.send(`**WARNING:** Daily posting is enabled, however permissions for me to send messages and/or embed links in <#${dailyCObj.id}> has been revoked, and daily posting will not work until changed.`)
+      }
     }
-
-    cmd.run(client, message, args, client.cmdHook, roCMD)
 };

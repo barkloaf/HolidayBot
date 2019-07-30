@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
 const dbFile = require("./db.js");
+const blFile = require("./bl.js");
 const fs = require("fs");
 const RSSParser = require("rss-parser");
 const moment = require('moment');
@@ -12,6 +13,7 @@ require("moment-duration-format");
 
 client.db = new dbFile();
 client.db.init();
+client.bl = new blFile();
 
 client.cmdHook = new Discord.WebhookClient(config.whID, config.whToken);
 client.commands = new Discord.Collection();
@@ -62,16 +64,13 @@ console.log = function () {
 };
 
 const getDefaultChannel = (guild) => {
-    // get "original" default channel
     if(guild.channels.has(guild.id))
-      return guild.channels.get(guild.id);
+      return guild.channels.get(message.guild.id)
   
-    // Check for a "general" channel, which is often default chat
     const generalChannel = guild.channels.find(channel => channel.name === "general");
     if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
       return generalChannel;
-    // Now we get into the heavy stuff: first channel in order where the bot can speak
-    // hold on to your hats!
+
     return guild.channels
      .filter(c => c.type === "text" &&
        c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
@@ -88,32 +87,16 @@ for(let tz of tzArray) {
         let scheduleWait = require("util").promisify(setTimeout);
         for(let guild of client.guilds.array()) {
             let wait = require("util").promisify(setTimeout);
-            let regionDBResult = await client.db.r.table("guilds").get(guild.id).getField("region").run();
-            let dailyDBResult = await client.db.r.table("guilds").get(guild.id).getField("daily").run();
-            let adultDBResult = await client.db.r.table("guilds").get(guild.id).getField("adult").run();
-            let dailyChannelDBResult = await client.db.r.table("guilds").get(guild.id).getField("dailyChannel").run();
-            let dailyCObj = client.channels.get(`${dailyChannelDBResult}`);
+            let DBResult = await client.db.r.table("guilds").get(guild.id).run();
+            let dailyCObj = client.channels.get(`${DBResult.dailyChannel}`);
             let dailyAdult = ""
-            if(adultDBResult === true) {
+            if(DBResult.adult === true) {
                 dailyAdult = "&adult=true"
             }
-            if(regionDBResult === tz && dailyDBResult === true) {
-                if(!dailyCObj.permissionsFor(guild.me).has("SEND_MESSAGES") && !dailyCObj.permissionsFor(guild.me).has("EMBED_LINKS")) {
+            if(DBResult.region === tz && DBResult.daily === true) {
+                if(dailyCObj.permissionsFor(guild.me).has("SEND_MESSAGES") === false || dailyCObj.permissionsFor(guild.me).has("EMBED_LINKS") === false) {
                     console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `Attempted to daily post in "${guild.name}" but permission was revoked.`);
                     client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `Attempted to daily post in \`${guild.name}\` but permission was revoked.`)
-                    client.channels.get(`${getDefaultChannel(guild).id}`).send({embed: {
-                        color: 0xc6373e,
-                        author: {
-                          name: client.user.username,
-                          icon_url: client.user.displayAvatarURL
-                        },
-                        title: "Error!",
-                        description: `Attempted to daily post in <#${dailyChannelDBResult}>, but permission to send messages and/or embeds was revoked.`,
-                        footer: {
-                            icon_url: client.user.displayAvatarURL,
-                            text: "HolidayBot Daily Posting"
-                        }
-                    }})
                     continue;
                 };
                 let items = "";
@@ -123,7 +106,7 @@ for(let tz of tzArray) {
                     if(items === "") {
                         console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `Attempted to daily post in "${guild.name}" but there was a feed error.`);
                         client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `Attempted to daily post in \`${guild.name}\` but there was a feed error.`)
-                        client.channels.get(`${dailyChannelDBResult}`).send({embed: {
+                        client.channels.get(`${DBResult.dailyChannel}`).send({embed: {
                             color: 0xc6373e,
                             author: {
                                 name: client.user.username,
@@ -137,7 +120,7 @@ for(let tz of tzArray) {
                             }
                         }});
                     } else {
-                        client.channels.get(`${dailyChannelDBResult}`).send({embed: {
+                        client.channels.get(`${DBResult.dailyChannel}`).send({embed: {
                             color: 0x3a1cbb,
                             author: {
                                 name: client.user.username,

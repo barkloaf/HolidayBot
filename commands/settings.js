@@ -5,16 +5,13 @@ require("moment-duration-format");
 const Discord = require("discord.js");
 
 const getDefaultChannel = (guild) => {
-    // get "original" default channel
     if(guild.channels.has(guild.id))
-      return guild.channels.get(guild.id)
+      return guild.channels.get(message.guild.id)
   
-    // Check for a "general" channel, which is often default chat
     const generalChannel = guild.channels.find(channel => channel.name === "general");
     if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
       return generalChannel;
-    // Now we get into the heavy stuff: first channel in order where the bot can speak
-    // hold on to your hats!
+
     return guild.channels
      .filter(c => c.type === "text" &&
        c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
@@ -84,14 +81,7 @@ const getDefaultRegion = (guild) => {
     return defaultRegion;
 };
 
-module.exports.run = async (client, message, args, cmdHook, roCMD) => {
-    let prefixDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("prefix").run()
-    let regionDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("region").run()
-    let adultDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("adult").run()
-    let dailyDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("daily").run()
-    let dailyChannelDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("dailyChannel").run()
-    let commandDBResult = await client.db.r.table("guilds").get(message.guild.id).getField("command").run()
-
+module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => {
     const embed = new Discord.RichEmbed()
     .setTitle(`Current guild settings for ${message.guild.name}`)
     .setAuthor("HolidayBot", `${client.user.displayAvatarURL}`)
@@ -99,12 +89,12 @@ module.exports.run = async (client, message, args, cmdHook, roCMD) => {
     .setDescription("Run `help set` for more information")
     .setFooter(message.author.username, message.author.avatarURL)
     .setThumbnail(message.guild.iconURL)
-    .addField("Prefix (default: `h]`):", prefixDBResult)
-    .addField("Region (defaut: `" + `${getDefaultRegion(message.guild)}` + "`):", regionDBResult)
-    .addField("Adult (default: `false`):", adultDBResult)
-    .addField("Daily Posting (default: `true`):", dailyDBResult)
-    .addField("Daily Posting Channel (if enabled) (default: `" + `${getDefaultChannel(message.guild)}` + "`):", "<#" + dailyChannelDBResult + ">")
-    .addField("Holiday Command (if enabled) (default `true`):", commandDBResult)
+    .addField("Prefix (default: `h]`):", DBResult.prefix)
+    .addField("Region (defaut: `" + `${getDefaultRegion(message.guild)}` + "`):", DBResult.region)
+    .addField("Adult (default: `false`):", DBResult.adult)
+    .addField("Daily Posting (default: `true`):", DBResult.daily)
+    .addField("Daily Posting Channel (if enabled) (default: `" + `${getDefaultChannel(message.guild)}` + "`):", "<#" + DBResult.dailyChannel + ">")
+    .addField("Holiday Command (if enabled) (default `true`):", DBResult.command)
 
     message.channel.send({embed});
     
