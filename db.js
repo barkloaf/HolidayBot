@@ -1,6 +1,6 @@
 const getDefaultChannel = (guild) => {
     if(guild.channels.has(guild.id))
-      return guild.channels.get(message.guild.id)
+      return guild.channels.get(guild.id)
   
     const generalChannel = guild.channels.find(channel => channel.name === "general");
     if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
