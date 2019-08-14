@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const config = require("./config.json");
 const dbFile = require("./db.js");
 const blFile = require("./bl.js");
+const miscFile = require("./misc.js")
 const fs = require("fs");
 const RSSParser = require("rss-parser");
 const moment = require('moment');
@@ -15,7 +16,8 @@ client.db = new dbFile();
 client.db.init();
 client.bl = new blFile();
 
-client.cmdHook = new Discord.WebhookClient(config.whID, config.whToken);
+client.misc = new miscFile();
+
 client.commands = new Discord.Collection();
 let tzArray = moment.tz.names();
 const cron = require('node-cron');
@@ -79,8 +81,7 @@ for(let tz of tzArray) {
             }
             if(DBResult.region === tz && DBResult.daily === true) {
                 if(dailyCObj.permissionsFor(guild.me).has("SEND_MESSAGES") === false || dailyCObj.permissionsFor(guild.me).has("EMBED_LINKS") === false) {
-                    console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `Attempted to daily post in "${guild.name}" but permission was revoked.`);
-                    client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `Attempted to daily post in \`${guild.name}\` but permission was revoked.`)
+                    client.misc.cmdHook("permission was revoked", "dp", "fail", null, guild, tz);
                     continue;
                 };
                 let items = "";
@@ -88,8 +89,7 @@ for(let tz of tzArray) {
                     try {feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")}
                     catch (err) {}
                     if(items === "") {
-                        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `Attempted to daily post in "${guild.name}" but there was a feed error.`);
-                        client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `Attempted to daily post in \`${guild.name}\` but there was a feed error.`)
+                        client.misc.cmdHook("there was a feed error", "dp", "fail", null, guild, tz);
                         client.channels.get(`${DBResult.dailyChannel}`).send({embed: {
                             color: 0xc6373e,
                             author: {
@@ -124,8 +124,7 @@ for(let tz of tzArray) {
                     }
                 });
             } else continue;
-            console.log("[" + clc.green("SUCC") + "] " + `Daily Posted in "${guild.name}" (ID: ${guild.id}) (tz: ${tz})`);
-            client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `Daily Posted in \`${guild.name}\` (ID: ${guild.id}) (tz: __${tz}__)`);
+            client.misc.cmdHook(null, "dp", "succ", null, guild, tz);
             await wait(5000);
             continue;
         }

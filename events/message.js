@@ -25,8 +25,7 @@ module.exports.run = async (client, message) => {
         return;
     }
     if(BLResult) {
-        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("BL") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-        client.cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "BL" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+        client.misc.cmdHook(message.content, "fail", "BL", message.author, message.guild, null);
         return message.channel.send({embed: {
             color: 0xc6373e,
             author: {

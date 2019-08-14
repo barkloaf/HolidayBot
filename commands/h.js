@@ -9,8 +9,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
     let [cmdRegion, ...ignored] = args;
 
     if(DBResult.command === false && message.author.id !== config.ownerID) {
-        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-        cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+        client.misc.cmdHook(message.content, "fail", "PERM", message.author, message.guild, null);
         return message.channel.send({embed: {
             color: 0xc6373e,
             author: {
@@ -44,8 +43,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
         parser.parseURL(cmdURL, function(err, feed) {
             try {feed.items.forEach(item => items += `\n\n` + "• " + `**${item.title}**` + "")}
             catch (error) {
-                console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-                cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+                client.misc.cmdHook(message.content, "fail", "ERR", message.author, message.guild, null);
                 return message.channel.send({embed: {
                     color: 0xc6373e,
                     author: {
@@ -79,8 +77,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
             }});
         });
     } else {
-        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("SYN") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-        cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "SYN" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+        client.misc.cmdHook(message.content, "fail", "SYN", message.author, message.guild, null);
         return message.channel.send({embed: {
             color: 0xc6373e,
             author: {
@@ -88,15 +85,14 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
               icon_url: client.user.displayAvatarURL
             },
             title: "Error!",
-            description: "Not a valid tz/zoneinfo database region. See list of all valid regions [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).",
+            description: `Not a valid tz/zoneinfo database region (e.g. \`${client.misc.getDefaultRegion(message.guild)}\`). See list of all valid regions [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).`,
             footer: {
                 icon_url: message.author.displayAvatarURL,
                 text: message.author.username
             }
         }});
     }
-    console.log("[" + clc.green("SUCC") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-    cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`) 
+    client.misc.cmdHook(message.content, "succ", null, message.author, message.guild, null);
 };
 
 module.exports.help = {

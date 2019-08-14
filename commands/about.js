@@ -13,14 +13,14 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
     .setDescription("I am a bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from [checkiday.com](https://checkiday.com)")
     .setFooter(message.author.username, message.author.avatarURL)
     .setThumbnail(client.user.displayAvatarURL)
-    .addField("Check out the source and invite link", "[GitHub](https://github.com/barkloaf/HolidayBot)")
+    .addField("Check out the source and invite link!", "[GitHub](https://github.com/barkloaf/HolidayBot)")
+    .addField("Vote for HolidayBot!", "[Discord Bot List](https://discordbots.org/bot/504508062929911869/vote)")
     .addField("Feedback?",
         `Feel free to contact the bot owner, <@${config.ownerID}> :3`)
 
     message.channel.send({embed});
 
-    console.log("[" + clc.green("SUCC") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-    cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`) 
+    client.misc.cmdHook(message.content, "succ", null, message.author, message.guild, null);
 };
 
 module.exports.help = {

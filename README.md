@@ -1,6 +1,8 @@
 # HolidayBot
 A discord bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
 
+### Vote for HolidayBot on [discordbots.org!](https://discordbots.org/bot/504508062929911869)
+
 [![Invite](https://wildcard.yiff.church/i/ovgxbdm4.png)](https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot)
 
 ## Commands list

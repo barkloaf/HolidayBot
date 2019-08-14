@@ -19,8 +19,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
                 .addField("Output", output);
             message.channel.send(embed);
         } catch (err) {
-            console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("ERR") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-            cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "ERR" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+            client.misc.cmdHook(message.content, "fail", "ERR", message.author, message.guild, null);
             const embed = new Discord.RichEmbed()
                 .setColor(0x10525C)
                 .setTitle("❌ Eval Failed")
@@ -29,8 +28,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
             return message.channel.send(embed);
         }
     } else {
-        console.log("[" + clc.red("FAIL") + "] " + "[" + clc.magenta("PERM") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-        cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "FAIL" + "**] " + "[**" + "PERM" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`)
+        client.misc.cmdHook(message.content, "fail", "PERM", message.author, message.guild, null);
         return message.channel.send({embed: {
             color: 0xc6373e,
             author: {
@@ -46,8 +44,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
         }});
 
     }
-    console.log("[" + clc.green("SUCC") + "] " + `${message.author.tag} (ID: ${message.author.id}) ran "${message}" in "${message.guild.name}" (ID: ${message.guild.id})`);
-    cmdHook.send("`[" + `${moment().format('DD/MM/YYYY] [HH:mm:ss')}` + "]`" + "[**" + "SUCC" + "**] " + `__${message.author.tag}__ (ID: ${message.author.id}) ran \`${message}\` in __${message.guild.name}__ (ID: ${message.guild.id})`) 
+    client.misc.cmdHook(message.content, "succ", null, message.author, message.guild, null);
 };
 
 module.exports.help = {

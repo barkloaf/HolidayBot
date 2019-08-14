@@ -1,80 +1,3 @@
-const getDefaultChannel = (guild) => {
-    if(guild.channels.has(guild.id))
-      return guild.channels.get(guild.id)
-  
-    const generalChannel = guild.channels.find(channel => channel.name === "general");
-    if (generalChannel && generalChannel.permissionsFor(guild.client.user).has("SEND_MESSAGES") && generalChannel.permissionsFor(guild.client.user).has("EMBED_LINKS"))
-      return generalChannel;
-
-    return guild.channels
-     .filter(c => c.type === "text" &&
-       c.permissionsFor(guild.client.user).has("SEND_MESSAGES") && c.permissionsFor(guild.client.user).has("EMBED_LINKS"))
-     .sort((a, b) => a.position - b.position ||
-       Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber())
-     .first();
-  }
-
-const getDefaultRegion = (guild) => {
-    var defaultRegion = "";
-    //brazil, us-west, japan, singapore, eu-central, hongkong, us-south, southafrica, us-central, london, us-east, sydney, eu-west, amsterdam, frankfurt, russia
-
-    switch(guild.region) {
-        case "brazil":
-            defaultRegion = "America/Sao_Paulo";
-            break;
-        case "us-west":
-            defaultRegion = "America/Los_Angeles";
-            break;
-        case "japan":
-            defaultRegion = "Asia/Tokyo";
-            break;
-        case "singapore":
-            defaultRegion = "Asia/Singapore";
-            break;
-        case "eu-central":
-            defaultRegion = "Europe/Berlin";
-            break;
-        case "hongkong":
-            defaultRegion = "Asia/Hong_Kong";
-            break;
-        case "us-south":
-            defaultRegion = "America/Chicago";
-            break;
-        case "southafrica":
-            defaultRegion = "Africa/Johannesburg";
-            break;
-        case "us-central":
-            defaultRegion = "America/Chicago";
-            break;
-        case "london":
-            defaultRegion = "Europe/London";
-            break;
-        case "us-east":
-            defaultRegion = "America/Toronto";
-            break;
-        case "sydney":
-            defaultRegion = "Australia/Sydney";
-            break;
-        case "eu-west":
-            defaultRegion = "Europe/Paris";
-            break;
-        case "amsterdam":
-            defaultRegion = "Europe/Amsterdam";
-            break;
-        case "frankfurt":
-            defaultRegion = "Europe/Berlin";
-            break;
-        case "russia":
-            defaultRegion = "Europe/Moscow";
-            break;
-        default:
-            defaultRegion = "UTC";
-            break;
-    };
-
-    return defaultRegion;
-};
-
 const rethink = require("rethinkdbdash");
 
 module.exports = class { 
@@ -95,15 +18,15 @@ module.exports = class {
                 }
             });
     } 
-    createGuild(guild) {
+    createGuild(guild, client) {
         return this.r.table('guilds').insert([{
             id: guild.id,
             guildname: guild.name,
             prefix: "h]",
-            region: getDefaultRegion(guild),
+            region: client.db.getDefaultRegion(guild),
             adult: false,
             daily: true,
-            dailyChannel: getDefaultChannel(guild).id,
+            dailyChannel: client.db.getDefaultChannel(guild).id,
             command: true
         }]).run()
         .catch((e) => console.log(e))
