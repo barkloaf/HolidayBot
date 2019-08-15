@@ -1,10 +1,6 @@
 {
     "token": "",
     "ownerID": "",
-    "whInfoID": "",
-    "whInfoToken": "",
-    "whSuccID": "",
-    "whSuccToken": "",
-    "whFailID": "",
-    "whFailToken": ""
+    "whID": "",
+    "whToken": ""
 }

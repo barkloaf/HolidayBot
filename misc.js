@@ -87,28 +87,23 @@ module.exports = class {
 
     cmdHook(content, type, subType, assocUser, assocGuild, assocTz) {
         var embedContent = [""];
-        var whichWh = 0;
         switch(type) {
             case "succ":
                 console.log(`[${clc.green("SUCC")}] ${assocUser.tag} (ID: ${assocUser.id}) ran "${content}" in "${assocGuild.name}" (ID: ${assocGuild.id})`);
-                whichWh = 1;
                 embedContent = [0x1ca037, `${assocUser.tag} (ID: ${assocUser.id})`, `Ran \`${content}\` in __${assocGuild.name}__ (ID: ${assocGuild.id})`];
                 break;
             case "fail":
                 console.log(`[${clc.red("FAIL")}][${clc.magenta(`${subType}`)}] ${assocUser.tag} (ID: ${assocUser.id}) ran "${content}" in "${assocGuild.name}" (ID: ${assocGuild.id})`);
-                whichWh = 2;
                 embedContent = [0xc6373e, `${assocUser.tag} (ID: ${assocUser.id})`, `[**${subType}**] Ran \`${content}\` in __${assocGuild.name}__ (ID: ${assocGuild.id})`];
                 break;
             case "dp":
                 switch(subType) {
                     case "succ":
                         console.log(`[${clc.green("SUCC")}] Daily Posted in "${assocGuild.name}" (ID: ${assocGuild.id}) (tz: ${assocTz})`);
-                        whichWh = 1;
                         embedContent = [0x1ca037, `Successfully daily posted in \`${assocGuild.name}\` (ID: ${assocGuild.id})`, `tz: __${assocTz}__`];
                         break;
                     case "fail":
                         console.log(`[${clc.red("FAIL")}] Attempted to daily post in "${assocGuild.name}" tz: ${assocTz} but ${content}`);
-                        whichWh = 2;
                         embedContent = [0xc6373e, `Failure to daily post in \`${assocGuild.name}\` (ID: ${assocGuild.id}) tz: __${assocTz}__`, `but ${content}`];
                         break;
                 }
@@ -138,11 +133,7 @@ module.exports = class {
                 }
                 break;
         }
-        switch(whichWh) {
-            case 0: var whObj = new Discord.WebhookClient(config.whInfoID, config.whInfoToken); break;
-            case 1: var whObj = new Discord.WebhookClient(config.whSuccID, config.whSuccToken); break;
-            case 2: var whObj = new Discord.WebhookClient(config.whFailID, config.whFailToken); break;
-        }
+        var whObj = new Discord.WebhookClient(config.whID, config.whToken);
         
         return whObj.send({embeds: [{
             color: embedContent[0],
