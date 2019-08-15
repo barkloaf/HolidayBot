@@ -23,10 +23,10 @@ module.exports = class {
             id: guild.id,
             guildname: guild.name,
             prefix: "h]",
-            region: client.db.getDefaultRegion(guild),
+            region: client.misc.getDefaultRegion(guild),
             adult: false,
             daily: true,
-            dailyChannel: client.db.getDefaultChannel(guild).id,
+            dailyChannel: client.misc.getDefaultChannel(guild).id,
             command: true
         }]).run()
         .catch((e) => console.log(e))
