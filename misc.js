@@ -124,12 +124,15 @@ module.exports = class {
                         break;
                     case "channelDelete":
                         console.log(`[${clc.blue("INFO")}] Guild "${assocGuild.name}" (ID: ${assocGuild.id}) has deleted their daily channel. Resetting to ${content}`);
-                        embedContent = [0x10525c, `Guild \`${assocGuild.name}\` (ID: ${assocGuild.id}) deleted their daily channel.`, `Resetting to __${content}__`];
+                        embedContent = [0x10525c, `Guild \`${assocGuild.name}\` (ID: ${assocGuild.id}) has deleted their daily channel.`, `Resetting to __${content}__`];
                         break;
                     case "start":
                         console.log(`[${clc.blue("INFO")}] Bot Started!`);
                         embedContent = [0x10525c, `Bot Started!`, ``];
                         break;
+                    case "misconfig":
+                        console.log(`[${clc.blue("INFO")}] Guild "${assocGuild.name}" (ID: ${assocGuild.id}) has an invalid server config. Leaving...`);
+                        embedContent = [0x10525c, `Guild \`${assocGuild.name}\` (ID: ${assocGuild.id}) has an invalid server config.`, `__Leaving...__`]
                 }
                 break;
         }

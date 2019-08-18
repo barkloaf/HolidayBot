@@ -71,9 +71,14 @@ let parser = new RSSParser();
 for(let tz of tzArray) {
     cron.schedule('2 0 */1 * *' , async () => {
         let scheduleWait = require("util").promisify(setTimeout);
-        for(let guild of client.guilds.array()) {
+        for(let guild of client.guilds.values()) {
             let wait = require("util").promisify(setTimeout);
             let DBResult = await client.db.r.table("guilds").get(guild.id).run();
+            try {
+                var check = DBResult.dailyChannel
+            } catch (err) {
+                continue;
+            }
             let dailyCObj = client.channels.get(`${DBResult.dailyChannel}`);
             let dailyAdult = ""
             if(DBResult.adult === true) {

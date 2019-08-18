@@ -8,6 +8,14 @@ module.exports.run = async (client, message) => {
     if(!message.guild) return;
     if(message.author.bot) return;
     let DBResult = await client.db.r.table("guilds").get(message.guild.id).run();
+    try {
+        var check = DBResult.prefix
+    } catch (err) {
+        client.misc.cmdHook(null, "info", "misconfig", null, message.guild, null);
+        message.guild.owner.send("There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
+            .then(() => message.guild.leave());
+        return;
+    }
     let BLResult = await client.bl.r.table("blacklist").get(message.author.id).run();
     if(message.content.indexOf(DBResult.prefix) !== 0) return;
 

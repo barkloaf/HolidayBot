@@ -11,7 +11,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
         try {
             const evaled = eval(roCMD);
             let output = `\`\`\`js\n${evaled}\n\`\`\``
-            if(output.length > 1028) output = "\`\`\`js\nundefined\`\`\`";
+            if(output.length > 1028) output = "\`\`\`js\noverflow\`\`\`";
             const embed = new Discord.RichEmbed()
                 .setColor(0x10525C)
                 .setTitle("✅ Eval Successful")
