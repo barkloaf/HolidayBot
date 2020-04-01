@@ -27,7 +27,7 @@ module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => 
             icon_url: client.user.displayAvatarURL
         },
         title: "Pong!",
-        description: `API Latency ${Math.round(client.ping)}ms\nMessage Latency: ${messagePing}`,
+        description: `API Latency ${Math.round(client.ping)}ms\nMessage Latency: ${messagePing}ms`,
         footer: {
             icon_url: message.author.displayAvatarURL,
             text: message.author.username
