@@ -4,14 +4,30 @@ require("moment-timezone");
 require("moment-duration-format");
 
 module.exports.run = async (client, message, args, cmdHook, roCMD, DBResult) => {
-    message.channel.send({embed: {
+    const startMessage = await message.channel.send({embed: {
+        color: 1069660,
+        author: {
+            name: "HolidayBot",
+            icon_url: client.user.displayAvatarURL
+        },
+        title: "Pinging!",
+        description: "Awaiting response",
+        footer: {
+            icon_url: message.author.displayAvatarURL,
+            text: message.author.username
+        }
+    }});
+
+    let messagePing = Math.round(startMessage.createdTimestamp - message.createdTimestamp);
+
+    startMessage.edit("", {embed: {
         color: 1069660,
         author: {
             name: "HolidayBot",
             icon_url: client.user.displayAvatarURL
         },
         title: "Pong!",
-        description: `${Math.round(client.ping)}` + `ms`,
+        description: `API Latency ${Math.round(client.ping)}ms\nMessage Latency: ${messagePing}`,
         footer: {
             icon_url: message.author.displayAvatarURL,
             text: message.author.username
