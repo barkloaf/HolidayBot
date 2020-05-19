@@ -15,9 +15,9 @@ type Guild struct {
 	Prefix       []string `rethinkdb:"prefix"`
 	Region       string   `rethinkdb:"region"`
 	DailyChannel string   `rethinkdb:"dailyChannel"`
-	Adult        bool     `rethink:"adult"`
-	Daily        bool     `rethink:"daily"`
-	Command      bool     `rethink:"command"`
+	Adult        bool     `rethinkdb:"adult"`
+	Daily        bool     `rethinkdb:"daily"`
+	Command      bool     `rethinkdb:"command"`
 }
 
 //Blacklistee struct
