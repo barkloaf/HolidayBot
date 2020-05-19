@@ -1,5 +1,5 @@
 # HolidayBot
-A discord bot created with discord.js that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
+A discord bot created with [DiscordGo](https://github.com/bwmarrin/discordgo) that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
 
 ### Vote for HolidayBot on [discordbots.org!](https://discordbots.org/bot/504508062929911869)
 
@@ -9,17 +9,17 @@ A discord bot created with discord.js that spits out real holidays that you may 
 Default prefix is `h]`
 
 * `help` - Shows a list of all commands
-* `about` - Shows information about the bot (purpose, author, etc.)
+* `about` - Shows infomation about the bot (invite, voting, source, purpose, author, etc.)
 * `settings` - Displays current server-specific settings.
 * `ping` - Pong!
 * `stats` - Shows bot statistics like uptime, lib versions, etc.
 * `h [region]` - Displays holidays in the specified region or server region on command (if enabled)
 * `set` - Sets server-specific settings (Manage Server permission required)
-    * `set prefix <desiredPrefix>` - Changes the prefix used on this server (default: `h]`)
-    * `set region <desiredRegion>` - Changes the region to any valid tz/zoneinfo database region. See list [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). This is used for the daily posting region, as well as the default region used when `h [region]` is run. By default, this will be the timezone associated with the server region.
+    * `set prefix <add|remove> <desiredPrefix>` - Changes the prefixes used on this server (default: `h]`)
+    * `set region <desiredRegion>` - Changes the region to any valid tz/zoneinfo database region (eg. `America/Chicago`). See list [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). This is used for the daily posting region, as well as the default region used when `h [region]` is run. By default, this will be the timezone associated with the server region.
     * `set adult <on|off>` - Enables/disables content that may not be safe for viewing by children (default: `off`/`false`)
     * `set daily <on|off>` - Enables/disables the bot posting new holidays every midnight in the set region (default: `on`/`true`)
-    * `set dailyChannel <channelTag>` - Sets the channel the daily holidays (if enabled) will be posted in. By default, this will either be any channel named `general` or the first channel the bot is able to send messages in.
+    * `set dailyChannel <channelMention|channelID>` - Sets the channel the daily holidays (if enabled) will be posted in. Permission to read and send messages and embed links must be granted in the channel before setting it. By default, this will be the first channel the bot is able to send messages in.
     * `set command <on|off>` - Enables/disables the ability for users to run `h [region]` to display holidays on command (default: `on`/`true`)
     * `set reset` - Resets this guild's settings to the default settings
 
