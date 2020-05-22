@@ -125,7 +125,9 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if (perms&discordgo.PermissionReadMessages != discordgo.PermissionReadMessages) || (perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages) || (perms&discordgo.PermissionEmbedLinks != discordgo.PermissionEmbedLinks) {
-		client.ChannelMessageSend(message.ChannelID, "**WARNING:** Daily posting is enabled, however permissions for me to read messages, send messages, and/or embed links in <#"+dbResult.DailyChannel+"> has been revoked, and daily posting will not work until rectified.")
+		if dbResult.Daily == true {
+			client.ChannelMessageSend(message.ChannelID, "**WARNING:** Daily posting is enabled, however permissions for me to read messages, send messages, and/or embed links in <#"+dbResult.DailyChannel+"> has been revoked, and daily posting will not work until rectified.")
+		}
 	}
 
 	if succ {
