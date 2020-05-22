@@ -114,6 +114,8 @@ func dailyPosting(client *discordgo.Session) {
 				}
 
 				client.ChannelMessageSendEmbed(channel.ID, embed)
+
+				misc.Log(client, "", "dp", "succ", nil, guild, tz)
 			}
 		})
 	}
