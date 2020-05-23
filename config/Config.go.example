@@ -6,8 +6,6 @@ import "time"
 type Configuration struct {
 	Token     string
 	OwnerID   string
-	WhID      string
-	WhToken   string
 	UseColor  int
 	SuccColor int
 	FailColor int
@@ -22,8 +20,6 @@ func init() {
 	Config = Configuration{
 		Token:     "",
 		OwnerID:   "",
-		WhID:      "",
-		WhToken:   "",
 		UseColor:  0x10525c,
 		SuccColor: 0x1ca037,
 		FailColor: 0xc6373e,

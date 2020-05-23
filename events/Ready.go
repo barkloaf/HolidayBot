@@ -1,9 +1,6 @@
 package events
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/barkloaf/HolidayBot/misc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -23,6 +20,5 @@ func Ready(client *discordgo.Session, ready *discordgo.Ready) {
 		},
 	})
 
-	fmt.Println(time.Now().Format(time.RFC1123Z) + " Bot Started!")
 	misc.Log(client, "", "info", "start", nil, nil, "")
 }

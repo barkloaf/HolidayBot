@@ -1,39 +1,42 @@
 package misc
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
-	"github.com/barkloaf/HolidayBot/config"
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/logrusorgru/aurora"
 )
 
 //Log function
 func Log(client *discordgo.Session, content string, group string, subGroup string, assocUser *discordgo.User, assocGuild *discordgo.Guild, assocTz string) {
-	var color int
+	var tag aurora.Value
 	var embedContent [2]string
-	var data *discordgo.WebhookParams
+
 	switch group {
 	case "succ":
-		color = config.Config.SuccColor
+		tag = aurora.BrightGreen("SUCC")
 		embedContent[0] = assocUser.Username + "#" + assocUser.Discriminator + " (ID: " + assocUser.ID + ")"
-		embedContent[1] = "Ran `" + content + "` in __" + assocGuild.Name + "__ (ID: " + assocUser.ID + ")"
+		embedContent[1] = "Ran `" + content + "` in `" + assocGuild.Name + "` (ID: " + assocUser.ID + ")"
 	case "fail":
-		color = config.Config.FailColor
+		tag = aurora.BrightRed("FAIL")
 		embedContent[0] = assocUser.Username + "#" + assocUser.Discriminator + " (ID: " + assocUser.ID + ")"
-		embedContent[1] = "[**" + subGroup + "**] Ran `" + content + "` in __" + assocGuild.Name + "__ (ID: " + assocUser.ID + ")"
+		embedContent[1] = "[" + subGroup + "] Ran `" + content + "` in `" + assocGuild.Name + "` (ID: " + assocUser.ID + ")"
 	case "dp":
 		switch subGroup {
 		case "succ":
-			color = config.Config.DpColor
+			tag = aurora.BrightBlue("SUCC")
 			embedContent[0] = "Daily Posted in `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ")"
-			embedContent[1] = "tz: __" + assocTz + "__"
+			embedContent[1] = "tz: `" + assocTz + "`"
 		case "fail":
-			color = config.Config.FailColor
-			embedContent[0] = "Failure to daily post in `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ") tz: __" + assocTz + "__"
+			tag = aurora.BrightRed("FAIL")
+			embedContent[0] = "Failure to daily post in `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ") tz: `" + assocTz + "`"
 			embedContent[1] = content
 		}
 	case "info":
-		color = config.Config.UseColor
+		tag = aurora.BrightMagenta("INFO")
 		switch subGroup {
 		case "join":
 			embedContent[0] = "New guild: `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ")"
@@ -42,28 +45,19 @@ func Log(client *discordgo.Session, content string, group string, subGroup strin
 			embedContent[0] = "Removed from guild: `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ")"
 			embedContent[1] = ""
 		case "nameChange":
-			embedContent[0] = "Guild `" + content + "` (ID: " + assocGuild.ID + ") has changed their name to __" + assocGuild.Name + "__"
+			embedContent[0] = "Guild `" + content + "` (ID: " + assocGuild.ID + ") has changed their name to `" + assocGuild.Name + "`"
 			embedContent[1] = ""
 		case "channelDelete":
 			embedContent[0] = "Guild `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ") has deleted their daily channel"
-			embedContent[1] = "Resetting to __" + content + "__"
+			embedContent[1] = "Resetting to `" + content + "`"
 		case "start":
 			embedContent[0] = "Bot Started!"
 			embedContent[1] = ""
 		case "misconfig":
 			embedContent[0] = "Guild `" + assocGuild.Name + "` (ID: " + assocGuild.ID + ") has an invalid server config"
-			embedContent[1] = "__Leaving...__"
+			embedContent[1] = "Leaving..."
 		}
 	}
-	embed := []*discordgo.MessageEmbed{&discordgo.MessageEmbed{
-		Color:       color,
-		Title:       embedContent[0],
-		Description: embedContent[1],
-		Timestamp:   time.Now().Format(time.RFC3339),
-	}}
-	data = &discordgo.WebhookParams{
-		Embeds: embed,
-	}
 
-	client.WebhookExecute(config.Config.WhID, config.Config.WhToken, true, data)
+	fmt.Println(aurora.BrightBlack(time.Now().Format(time.RFC1123)), "- [", tag, "]  "+strings.Join(embedContent[:], " "))
 }
