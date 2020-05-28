@@ -18,7 +18,7 @@ func setAdult(p Params) bool {
 		return false
 	}
 
-	db.UpdateAdult(p.Guild.ID, newAdult)
+	go db.UpdateAdult(p.Guild.ID, newAdult)
 
 	return true
 }
