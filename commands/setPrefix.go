@@ -50,7 +50,7 @@ func setPrefix(p Params) bool {
 		return false
 	}
 
-	db.UpdatePrefix(p.Guild.ID, dbPrefixes)
+	go db.UpdatePrefix(p.Guild.ID, dbPrefixes)
 
 	return true
 }
