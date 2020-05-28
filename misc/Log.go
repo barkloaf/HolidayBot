@@ -11,7 +11,7 @@ import (
 )
 
 //Log function
-func Log(client *discordgo.Session, content string, group string, subGroup string, assocUser *discordgo.User, assocGuild *discordgo.Guild, assocTz string) {
+func Log(content string, group string, subGroup string, assocUser *discordgo.User, assocGuild *discordgo.Guild, assocTz string) {
 	var tag aurora.Value
 	var embedContent [2]string
 

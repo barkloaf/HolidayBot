@@ -20,5 +20,5 @@ func Ready(client *discordgo.Session, ready *discordgo.Ready) {
 		},
 	})
 
-	misc.Log(client, "", "info", "start", nil, nil, "")
+	misc.Log("", "info", "start", nil, nil, "")
 }

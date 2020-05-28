@@ -69,7 +69,7 @@ func dailyPosting(client *discordgo.Session) {
 					continue
 				}
 				if (perms&discordgo.PermissionReadMessages != discordgo.PermissionReadMessages) || (perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages) || (perms&discordgo.PermissionEmbedLinks != discordgo.PermissionEmbedLinks) {
-					misc.Log(client, "permission was revoked", "dp", "fail", nil, guild, "")
+					misc.Log("permission was revoked", "dp", "fail", nil, guild, "")
 
 					continue
 				}
@@ -93,7 +93,7 @@ func dailyPosting(client *discordgo.Session) {
 
 					client.ChannelMessageSendEmbed(channel.ID, embed)
 
-					misc.Log(client, "there was a feed error", "dp", "fail", nil, guild, "")
+					misc.Log("there was a feed error", "dp", "fail", nil, guild, "")
 
 					continue
 				}
@@ -115,7 +115,7 @@ func dailyPosting(client *discordgo.Session) {
 
 				client.ChannelMessageSendEmbed(channel.ID, embed)
 
-				misc.Log(client, "", "dp", "succ", nil, guild, tz)
+				misc.Log("", "dp", "succ", nil, guild, tz)
 			}
 		})
 	}

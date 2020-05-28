@@ -43,5 +43,5 @@ func Errors(client *discordgo.Session, message *discordgo.Message, guild *discor
 
 	client.ChannelMessageSendEmbed(message.ChannelID, embed)
 
-	misc.Log(client, message.Content, "fail", group, message.Author, guild, "")
+	misc.Log(message.Content, "fail", group, message.Author, guild, "")
 }
