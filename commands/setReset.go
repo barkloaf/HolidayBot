@@ -11,12 +11,14 @@ func setReset(p Params) bool {
 		return false
 	}
 
-	db.UpdateAdult(p.Guild.ID, false)
-	db.UpdateCommand(p.Guild.ID, true)
-	db.UpdateDaily(p.Guild.ID, true)
-	db.UpdateDailyChannel(p.Guild.ID, channel.ID)
-	db.UpdatePrefix(p.Guild.ID, []string{"h]"})
-	db.UpdateRegion(p.Guild.ID, misc.GetDefaultRegion(p.Guild))
+	go func() {
+		db.UpdateAdult(p.Guild.ID, false)
+		db.UpdateCommand(p.Guild.ID, true)
+		db.UpdateDaily(p.Guild.ID, true)
+		db.UpdateDailyChannel(p.Guild.ID, channel.ID)
+		db.UpdatePrefix(p.Guild.ID, []string{"h]"})
+		db.UpdateRegion(p.Guild.ID, misc.GetDefaultRegion(p.Guild))
+	}()
 
 	return true
 }
