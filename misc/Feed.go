@@ -29,7 +29,7 @@ func Feed(tz string, adult bool) ([]*discordgo.MessageEmbedField, error) {
 	trimmedDate := pubDate[:strings.Index(pubDate, "00:")]
 
 	field := []*discordgo.MessageEmbedField{
-		&discordgo.MessageEmbedField{
+		{
 			Name:   trimmedDate,
 			Value:  itemString,
 			Inline: false,
