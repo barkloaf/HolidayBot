@@ -44,7 +44,7 @@ func setDailyChannel(p Params) bool {
 		return false
 	}
 
-	db.UpdateDailyChannel(p.Guild.ID, channel.ID)
+	go db.UpdateDailyChannel(p.Guild.ID, channel.ID)
 
 	return true
 }

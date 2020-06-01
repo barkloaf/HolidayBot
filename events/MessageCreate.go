@@ -40,7 +40,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if dbResult.Guildname == "" {
-			misc.Log(client, "", "info", "misconfig", nil, guild, "")
+			misc.Log("", "info", "misconfig", nil, guild, "")
 			dm, err := client.UserChannelCreate(guild.OwnerID)
 			if err == nil {
 				client.ChannelMessageSend(dm.ID, "There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
@@ -131,6 +131,6 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if succ {
-		misc.Log(client, message.Content, "succ", "", message.Author, guild, "")
+		misc.Log(message.Content, "succ", "", message.Author, guild, "")
 	}
 }

@@ -18,7 +18,7 @@ func setDaily(p Params) bool {
 		return false
 	}
 
-	db.UpdateDaily(p.Guild.ID, newDaily)
+	go db.UpdateDaily(p.Guild.ID, newDaily)
 
 	return true
 }

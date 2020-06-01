@@ -13,7 +13,7 @@ func GuildUpdate(client *discordgo.Session, guild *discordgo.GuildUpdate) {
 		return
 	}
 	if dbResult.Guildname == "" {
-		misc.Log(client, "", "info", "misconfig", nil, guild.Guild, "")
+		misc.Log("", "info", "misconfig", nil, guild.Guild, "")
 		dm, err := client.UserChannelCreate(guild.Guild.OwnerID)
 		if err == nil {
 			client.ChannelMessageSend(dm.ID, "There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
@@ -24,7 +24,7 @@ func GuildUpdate(client *discordgo.Session, guild *discordgo.GuildUpdate) {
 	}
 
 	if dbResult.Guildname != guild.Guild.Name {
-		misc.Log(client, dbResult.Guildname, "info", "nameChange", nil, guild.Guild, "")
+		misc.Log(dbResult.Guildname, "info", "nameChange", nil, guild.Guild, "")
 
 		db.UpdateGuildName(guild.Guild.ID, guild.Guild.Name)
 	}

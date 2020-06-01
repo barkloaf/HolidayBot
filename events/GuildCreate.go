@@ -16,5 +16,5 @@ func GuildCreate(client *discordgo.Session, guild *discordgo.GuildCreate) {
 
 	db.CreateGuild(client, guild.Guild)
 
-	misc.Log(client, "", "info", "join", nil, guild.Guild, "")
+	misc.Log("", "info", "join", nil, guild.Guild, "")
 }
