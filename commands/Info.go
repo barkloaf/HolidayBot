@@ -82,7 +82,7 @@ func init() {
 	About = Info{
 		Name:      "about",
 		Function:  about,
-		Desc:      "Shows infomation about the bot (invite, voting, source, purpose, author, etc.)",
+		Desc:      "Shows information about the bot (invite, voting, source, purpose, author, etc.)",
 		ShortDesc: "Shows information about the bot",
 		Syntax:    "about",
 	}
