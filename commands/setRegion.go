@@ -17,7 +17,7 @@ func setRegion(p Params) bool {
 		return false
 	}
 
-	db.UpdateRegion(p.Guild.ID, p.Args[2])
+	go db.UpdateRegion(p.Guild.ID, p.Args[2])
 
 	return true
 }

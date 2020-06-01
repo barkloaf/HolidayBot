@@ -24,5 +24,5 @@ func GuildDelete(client *discordgo.Session, guild *discordgo.GuildDelete) {
 
 	db.DeleteGuild(guild.Guild)
 
-	misc.Log(client, "", "info", "leave", nil, deletedGuild, "")
+	misc.Log("", "info", "leave", nil, deletedGuild, "")
 }

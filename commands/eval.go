@@ -81,7 +81,7 @@ func eval(p Params) bool {
 	p.Client.ChannelMessageSendEmbed(p.Message.ChannelID, embed)
 
 	if !succ {
-		misc.Log(p.Client, p.Message.Content, "fail", "ERR", p.Message.Author, p.Guild, "")
+		misc.Log(p.Message.Content, "fail", "ERR", p.Message.Author, p.Guild, "")
 	}
 
 	return succ

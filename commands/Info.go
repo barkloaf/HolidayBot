@@ -192,7 +192,7 @@ func init() {
 		Name:      "unblacklist",
 		Function:  unblacklist,
 		ShortDesc: "Removes a user from the blacklist",
-		Syntax:    "unblacklist <userMnetion|userID>",
+		Syntax:    "unblacklist <userMention|userID>",
 	}
 
 	InfoList = append(InfoList, Help, About, Settings, Ping, Stats, H, Set)

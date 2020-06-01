@@ -14,4 +14,8 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
+# Bot config files
 config/Config.go
+
+# IDE dirs
+.idea

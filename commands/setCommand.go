@@ -18,7 +18,7 @@ func setCommand(p Params) bool {
 		return false
 	}
 
-	db.UpdateDaily(p.Guild.ID, newCommand)
+	go db.UpdateDaily(p.Guild.ID, newCommand)
 
 	return true
 }
