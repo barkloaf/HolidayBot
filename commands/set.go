@@ -18,8 +18,10 @@ func set(p Params) bool {
 		fmt.Printf("Perms check Error: %v", err)
 	}
 	if perms&discordgo.PermissionManageServer != discordgo.PermissionManageServer {
-		Errors(p.Client, p.Message, p.Guild, "PERM", Set)
-		return false
+		if p.Message.Author.ID != config.Config.OwnerID {
+			Errors(p.Client, p.Message, p.Guild, "PERM", Set)
+			return false
+		}
 	}
 	if SetCommandMap[strings.ToLower(p.Args[1])] == nil {
 		Errors(p.Client, p.Message, p.Guild, "SYN", Set)
