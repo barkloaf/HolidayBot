@@ -42,27 +42,27 @@ func stats(p Params) bool {
 		Color: config.Config.UseColor,
 		Title: "HolidayBot Stats",
 		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Go version:",
 				Value:  runtime.Version(),
 				Inline: true,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "DiscordGo version:",
 				Value:  discordgo.VERSION,
 				Inline: true,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "# of guilds:",
 				Value:  strconv.FormatInt(int64(len(p.Client.State.Guilds)), 10),
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Memory usage:",
 				Value:  strconv.FormatFloat((float64(memory.HeapInuse)/1048576), 'f', 2, 64) + " MiB",
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Uptime:",
 				Value:  strings.Join(splitUptime, " "),
 				Inline: false,

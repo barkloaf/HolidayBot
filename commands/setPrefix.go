@@ -7,10 +7,6 @@ import (
 )
 
 func setPrefix(p Params) bool {
-	if len(p.Args) < 4 {
-		p.Args = append(p.Args, "", "")
-	}
-
 	dbPrefixes := p.DBResult.Prefix
 
 	if len(p.Args[3]) < 1 {

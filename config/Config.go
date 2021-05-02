@@ -1,6 +1,10 @@
 package config
 
-import "time"
+import (
+	"encoding/json"
+	"os"
+	"time"
+)
 
 //Configuration struct
 type Configuration struct {
@@ -17,13 +21,14 @@ type Configuration struct {
 var Config Configuration
 
 func init() {
-	Config = Configuration{
-		Token:     "",
-		OwnerID:   "",
-		UseColor:  0x10525c,
-		SuccColor: 0x1ca037,
-		FailColor: 0xc6373e,
-		DpColor:   0x3a1cbb,
-		StartTime: time.Now(),
+	file, err := os.Open("./config/config.json")
+	defer file.Close()
+	if err != nil {
+		panic(err)
 	}
+
+	parser := json.NewDecoder(file)
+	parser.Decode(&Config)
+
+	Config.StartTime = time.Now()
 }

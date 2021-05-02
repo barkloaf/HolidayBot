@@ -27,32 +27,32 @@ func settings(p Params) bool {
 			URL: p.Guild.IconURL(),
 		},
 		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Prefix (default: `h]`):",
 				Value:  strings.Join(p.DBResult.Prefix, " "),
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Region (default: `" + misc.GetDefaultRegion(p.Guild) + "`):",
 				Value:  p.DBResult.Region,
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Adult (default: `false`):",
 				Value:  strconv.FormatBool(p.DBResult.Adult),
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Daily Posting (default: `true`):",
 				Value:  strconv.FormatBool(p.DBResult.Daily),
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Daily Posting Channel (if enabled) (default: `<#" + defaultChannel.ID + ">` ):",
 				Value:  "<#" + p.DBResult.DailyChannel + ">",
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Holiday Command (default: `true`):",
 				Value:  strconv.FormatBool(p.DBResult.Command),
 				Inline: false,

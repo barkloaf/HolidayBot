@@ -8,7 +8,7 @@ import (
 
 //GuildDelete event
 func GuildDelete(client *discordgo.Session, guild *discordgo.GuildDelete) {
-	if guild.Guild.Unavailable == true {
+	if guild.Guild.Unavailable {
 		return
 	}
 

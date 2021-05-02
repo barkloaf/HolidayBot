@@ -25,6 +25,18 @@ func Feed(tz string, adult bool) ([]*discordgo.MessageEmbedField, error) {
 		itemString = itemString + "• **" + value.Title + "**\n\n"
 	}
 
+	itemString2 := ""
+	if len(itemString) > 1024 {
+		itemString = ""
+
+		for i := 0; i < len(feed.Items)/2; i++ {
+			itemString = itemString + "• **" + feed.Items[i].Title + "**\n\n"
+		}
+		for i := len(feed.Items) / 2; i < len(feed.Items); i++ {
+			itemString2 = itemString2 + "• **" + feed.Items[i].Title + "**\n\n"
+		}
+	}
+
 	pubDate := feed.Published
 	trimmedDate := pubDate[:strings.Index(pubDate, "00:")]
 
@@ -32,8 +44,18 @@ func Feed(tz string, adult bool) ([]*discordgo.MessageEmbedField, error) {
 		{
 			Name:   trimmedDate,
 			Value:  itemString,
-			Inline: false,
+			Inline: true,
 		},
+	}
+
+	if itemString2 != "" {
+		second := &discordgo.MessageEmbedField{
+			Name:   "\u200e",
+			Value:  itemString2,
+			Inline: true,
+		}
+
+		field = append(field, second)
 	}
 
 	return field, nil

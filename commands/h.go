@@ -9,10 +9,6 @@ import (
 )
 
 func h(p Params) bool {
-	if len(p.Args) < 2 {
-		p.Args = append(p.Args, "")
-	}
-
 	tz := p.DBResult.Region
 
 	_, err := time.LoadLocation(p.Args[1])

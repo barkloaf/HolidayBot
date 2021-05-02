@@ -18,7 +18,7 @@ func eval(p Params) bool {
 		output string
 	)
 
-	roCMD := strings.TrimPrefix(strings.Join(p.Args, " "), p.Args[0]+" ")
+	roCMD := strings.TrimPrefix(strings.TrimSpace(strings.Join(p.Args, " ")), p.Args[0]+" ")
 
 	functions := map[string]govaluate.ExpressionFunction{
 		"guildFetch": func(args ...interface{}) (interface{}, error) {
@@ -51,7 +51,7 @@ func eval(p Params) bool {
 		}
 	}
 
-	if len(output) > 2042 {
+	if len(output) > 1018 {
 		arrayized := strings.Split(output, " ")
 		p.Client.ChannelMessageSend(p.Message.ChannelID, strings.Join(arrayized[:len(arrayized)/2], " "))
 		p.Client.ChannelMessageSend(p.Message.ChannelID, strings.Join(arrayized[(len(arrayized)/2)+1:], " "))
@@ -61,12 +61,12 @@ func eval(p Params) bool {
 	embed := &discordgo.MessageEmbed{
 		Title: title,
 		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Input:",
 				Value:  "```go\n" + roCMD + "```",
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Output:",
 				Value:  "```" + output + "```",
 				Inline: false,

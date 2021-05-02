@@ -7,9 +7,7 @@ import (
 
 func help(p Params) bool {
 	var fieldArray []*discordgo.MessageEmbedField
-	if len(p.Args) < 2 {
-		p.Args = append(p.Args, "")
-	}
+
 	switch p.Args[1] {
 	case "set":
 		for _, value := range SetInfoList {
