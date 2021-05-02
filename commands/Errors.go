@@ -29,7 +29,7 @@ func Errors(client *discordgo.Session, message *discordgo.Message, guild *discor
 		Title:       "Error!",
 		Description: embedContent,
 		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "`" + info.Name + "`",
 				Value:  info.ShortDesc,
 				Inline: false,

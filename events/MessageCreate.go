@@ -52,12 +52,10 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	var prefix string
-	var dbPrefixes []string
-	dbPrefixes = append(dbResult.Prefix, "<@!"+client.State.User.ID+"> ", "<@!"+client.State.User.ID+">")
+	dbPrefixes := append(dbResult.Prefix, "<@!"+client.State.User.ID+"> ", "<@!"+client.State.User.ID+">")
 	for _, value := range dbPrefixes {
 		if strings.HasPrefix(message.Content, value) {
 			prefix = value
-			break
 		}
 	}
 	if prefix == "" {
@@ -65,7 +63,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	cmd := strings.TrimPrefix(message.Content, prefix)
-	args := strings.Split(cmd, " ")
+	args := append(strings.Split(cmd, " "), "", "", "", "", "", "", "", "")
 
 	perms, err := client.State.UserChannelPermissions(client.State.User.ID, message.ChannelID)
 	if err != nil {
@@ -125,7 +123,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if (perms&discordgo.PermissionReadMessages != discordgo.PermissionReadMessages) || (perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages) || (perms&discordgo.PermissionEmbedLinks != discordgo.PermissionEmbedLinks) {
-		if dbResult.Daily == true {
+		if dbResult.Daily {
 			client.ChannelMessageSend(message.ChannelID, "**WARNING:** Daily posting is enabled, however permissions for me to read messages, send messages, and/or embed links in <#"+dbResult.DailyChannel+"> has been revoked, and daily posting will not work until rectified.")
 		}
 	}

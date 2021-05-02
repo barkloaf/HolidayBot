@@ -18,12 +18,12 @@ func about(p Params) bool {
 			URL: p.Client.State.User.AvatarURL(""),
 		},
 		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Check out the source and invite link!",
 				Value:  "[GitHub](https://github.com/barkloaf/HolidayBot)",
 				Inline: false,
 			},
-			&discordgo.MessageEmbedField{
+			{
 				Name:   "Vote for HolidayBot!",
 				Value:  "[Discord Bot List](https://discordbots.org/bot/504508062929911869/vote)",
 				Inline: false,

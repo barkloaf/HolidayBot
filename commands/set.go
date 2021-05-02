@@ -9,10 +9,6 @@ import (
 )
 
 func set(p Params) bool {
-	if len(p.Args) < 2 {
-		p.Args = append(p.Args, "")
-	}
-
 	perms, err := p.Client.State.UserChannelPermissions(p.Message.Author.ID, p.Message.ChannelID)
 	if err != nil {
 		fmt.Printf("Perms check Error: %v", err)

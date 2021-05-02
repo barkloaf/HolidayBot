@@ -15,7 +15,7 @@
 # vendor/
 
 # Bot config files
-config/Config.go
+config/config.json
 
 # IDE dirs
 .idea

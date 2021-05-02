@@ -9,10 +9,6 @@ import (
 )
 
 func setDailyChannel(p Params) bool {
-	if len(p.Args) < 3 {
-		p.Args = append(p.Args, "")
-	}
-
 	idRegex := regexp.MustCompilePOSIX("([^>]*)")
 	match := idRegex.FindStringSubmatch(p.Args[2])
 	if len(match) < 2 {

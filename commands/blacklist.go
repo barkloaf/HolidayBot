@@ -8,10 +8,6 @@ import (
 )
 
 func blacklist(p Params) bool {
-	if len(p.Args) < 2 {
-		p.Args = append(p.Args, "")
-	}
-
 	idRegex := regexp.MustCompilePOSIX("([^>]*)")
 
 	user, err := p.Client.User(idRegex.FindStringSubmatch(p.Args[1])[1])
@@ -25,7 +21,7 @@ func blacklist(p Params) bool {
 		}
 	}
 
-	reason := strings.Join(p.Args[2:], " ")
+	reason := strings.TrimSpace(strings.Join(p.Args[2:], " "))
 
 	db.CreateBlacklistee(user.ID, reason)
 	return true
