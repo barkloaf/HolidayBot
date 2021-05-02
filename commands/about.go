@@ -25,7 +25,7 @@ func about(p Params) bool {
 			},
 			{
 				Name:   "Vote for HolidayBot!",
-				Value:  "[Discord Bot List](https://discordbots.org/bot/504508062929911869/vote)",
+				Value:  "[Top.gg](https://top.gg/bot/504508062929911869/vote)",
 				Inline: false,
 			},
 		},

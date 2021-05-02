@@ -1,9 +1,15 @@
-# HolidayBot
-A discord bot created with [DiscordGo](https://github.com/bwmarrin/discordgo) that spits out real holidays that you may have never heard of before. All holidays are grabbed from https://checkiday.com
+<p align="center">
+    <a href="https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot">
+        <img src="https://wildcard.yiff.church/i/ovgxbdm4.png" />
+    </a>
+</p>
 
-### Vote for HolidayBot on [discordbots.org!](https://discordbots.org/bot/504508062929911869)
+# <p align="center">HolidayBot</p>
+<p align="center">A discord bot created with <a href="https://github.com/bwmarrin/discordgo">DiscordGo</a> that spits out real holidays that you may have never heard of before. All holidays are grabbed from <a href="https://checkiday.com">Checkiday</a></p>
+<p align="center">
+  <img src="https://top.gg/api/widget/status/504508062929911869.svg" alt="HolidayBot" /></p>
 
-[![Invite](https://wildcard.yiff.church/i/ovgxbdm4.png)](https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot)
+### <p align="center">Vote for HolidayBot on [Top.gg!](https://top.gg/bot/504508062929911869/vote)</p>
 
 ## Commands list
 Default prefix is `h]`
