@@ -2,58 +2,30 @@ package events
 
 import (
 	"fmt"
+	"runtime"
 	"strings"
 
-	"github.com/barkloaf/HolidayBot/config"
-
 	"github.com/barkloaf/HolidayBot/db"
-
-	"github.com/barkloaf/HolidayBot/commands"
 	"github.com/barkloaf/HolidayBot/misc"
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/Knetic/govaluate"
 )
 
-//MessageCreate event
 func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	message := m.Message
 
-	if message.Author.Bot {
+	if message.Author.ID != misc.Config.OwnerID {
 		return
-	}
-
-	guild, err := client.Guild(message.GuildID)
-	if err != nil || guild.ID == "" {
-		return
-	}
-
-	dbResult, err := db.GuildFetch(message.GuildID)
-	if err != nil {
-		return
-	}
-
-	if dbResult.Guildname == "" {
-		db.CreateGuild(client, guild)
-
-		dbResult, err = db.GuildFetch(message.GuildID)
-		if err != nil {
-			return
-		}
-
-		if dbResult.Guildname == "" {
-			misc.Log("", "info", "misconfig", nil, guild, "")
-			dm, err := client.UserChannelCreate(guild.OwnerID)
-			if err == nil {
-				client.ChannelMessageSend(dm.ID, "There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
-			}
-
-			client.GuildLeave(guild.ID)
-			return
-		}
 	}
 
 	var prefix string
-	dbPrefixes := append(dbResult.Prefix, "<@!"+client.State.User.ID+"> ", "<@!"+client.State.User.ID+">")
-	for _, value := range dbPrefixes {
+	for _, value := range []string{
+		"<@!" + client.State.User.ID + "> eval",
+		"<@!" + client.State.User.ID + ">eval",
+		"<@" + client.State.User.ID + "> eval",
+		"<@" + client.State.User.ID + ">eval",
+	} {
 		if strings.HasPrefix(message.Content, value) {
 			prefix = value
 		}
@@ -62,73 +34,113 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	cmd := strings.TrimPrefix(message.Content, prefix)
-	args := append(strings.Split(cmd, " "), "", "", "", "", "", "", "", "")
+	var memory runtime.MemStats
+	runtime.ReadMemStats(&memory)
 
-	perms, err := client.State.UserChannelPermissions(client.State.User.ID, message.ChannelID)
-	if err != nil {
-		fmt.Printf("Perms check Error: %v", err)
-		return
+	cmd := strings.TrimSpace(strings.TrimPrefix(message.Content, prefix))
+	input := cmd
+
+	var dbResult db.Guild
+	guild, err := client.Guild(message.GuildID)
+	if err == nil && guild.ID != "" {
+		dbResult, _ = db.SelectGuild(message.GuildID)
 	}
-	if (perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages) || (perms&discordgo.PermissionEmbedLinks != discordgo.PermissionEmbedLinks) {
-		if perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages {
-			dm, err := client.UserChannelCreate(message.Author.ID)
-			if err != nil {
-				dm, err := client.UserChannelCreate(guild.OwnerID)
-				if err != nil {
-					return
-				}
-				client.ChannelMessageSend(dm.ID, "I need permission to send messages and embed links!")
-			}
-			client.ChannelMessageSend(dm.ID, "I need permission to send messages and embed links!")
+
+	functions := map[string]govaluate.ExpressionFunction{
+		"selectGuild": func(args ...interface{}) (interface{}, error) {
+			return db.SelectGuild(args[0].(string))
+		},
+	}
+
+	var (
+		title  string
+		output string
+		succ   bool
+	)
+
+	expr, compErr := govaluate.NewEvaluableExpressionWithFunctions(input, functions)
+	if compErr != nil {
+		output = compErr.Error()
+		title = "❌ Compiler Error!"
+		succ = false
+	} else {
+		params := map[string]interface{}{
+			"client":   client,
+			"message":  message,
+			"guild":    guild,
+			"dbResult": dbResult,
+			"memory":   memory,
+		}
+
+		data, rtErr := expr.Evaluate(params)
+		if rtErr != nil {
+			output = rtErr.Error()
+			title = "❌ Runtime Error!"
+			succ = false
 		} else {
-			client.ChannelMessageSend(message.ChannelID, "I need permission to embed links here!")
+			output = fmt.Sprint(data)
+			title = "✅ Eval Successful!"
+			succ = true
 		}
-		return
 	}
 
-	blResult, _ := db.BlFetch(message.Author.ID)
-	if blResult.ID != "" {
-		commands.Errors(client, message, guild, "BL", commands.Info{
-			Name:      "Reason:",
-			ShortDesc: blResult.Reason,
+	if len(input) > 1014 {
+		input = "overflow"
+	}
+
+	if len(output) > 1018 {
+		arrayized := strings.Split(output, " ")
+		client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[:len(arrayized)/2], " "))
+		client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/2)+1:], " "))
+		output = "overflow"
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title: title,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Input:",
+				Value:  "```go\n" + input + "```",
+				Inline: false,
+			},
+			{
+				Name:   "Output:",
+				Value:  "```" + output + "```",
+				Inline: false,
+			},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text:    message.Author.Username,
+			IconURL: message.Author.AvatarURL(""),
+		},
+	}
+
+	client.ChannelMessageSendEmbed(message.ChannelID, embed)
+
+	if !succ {
+		misc.Logger(misc.Log{
+			Interaction: &discordgo.Interaction{
+				User: &discordgo.User{
+					ID: message.Author.ID,
+				},
+			},
+			Content:  cmd,
+			Group:    "fail",
+			Subgroup: "EVAL",
+			Guild:    message.GuildID,
 		})
+
 		return
 	}
 
-	if commands.CommandMap[strings.ToLower(args[0])] == nil {
-		return
-	}
-
-	for _, value := range commands.OwnerInfoList {
-		if value.Name == args[0] {
-			if message.Author.ID != config.Config.OwnerID {
-				return
-			}
-			break
-		}
-	}
-
-	succ := commands.CommandMap[strings.ToLower(args[0])](commands.Params{
-		Client:   client,
-		Message:  message,
-		Guild:    guild,
-		Args:     args,
-		DBResult: dbResult,
+	misc.Logger(misc.Log{
+		Interaction: &discordgo.Interaction{
+			User: &discordgo.User{
+				ID: message.Author.ID,
+			},
+		},
+		Content: cmd,
+		Group:   "succ",
+		Guild:   message.GuildID,
 	})
-
-	perms, err = client.State.UserChannelPermissions(client.State.User.ID, dbResult.DailyChannel)
-	if err != nil {
-		fmt.Printf("Perms check Error: %v", err)
-		return
-	}
-	if (perms&discordgo.PermissionReadMessages != discordgo.PermissionReadMessages) || (perms&discordgo.PermissionSendMessages != discordgo.PermissionSendMessages) || (perms&discordgo.PermissionEmbedLinks != discordgo.PermissionEmbedLinks) {
-		if dbResult.Daily {
-			client.ChannelMessageSend(message.ChannelID, "**WARNING:** Daily posting is enabled, however permissions for me to read messages, send messages, and/or embed links in <#"+dbResult.DailyChannel+"> has been revoked, and daily posting will not work until rectified.")
-		}
-	}
-
-	if succ {
-		misc.Log(message.Content, "succ", "", message.Author, guild, "")
-	}
 }

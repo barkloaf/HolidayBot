@@ -1,20 +1,15 @@
 package commands
 
-import "github.com/barkloaf/HolidayBot/db"
+import (
+	"github.com/barkloaf/HolidayBot/db"
+	"github.com/bwmarrin/discordgo"
+)
 
-func setAdult(p Params) bool {
-	var newAdult bool
-	switch p.Args[2] {
-	case "on", "true":
-		newAdult = true
-	case "off", "false":
-		newAdult = false
-	default:
-		Errors(p.Client, p.Message, p.Guild, "SYN", SetAdult)
-		return false
-	}
+func setAdult(client *discordgo.Session, interaction *discordgo.Interaction) error {
+	go db.UpdateAdult(
+		interaction.GuildID,
+		interaction.ApplicationCommandData().Options[0].Options[0].BoolValue(),
+	)
 
-	go db.UpdateAdult(p.Guild.ID, newAdult)
-
-	return true
+	return nil
 }

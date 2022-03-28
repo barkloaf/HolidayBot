@@ -5,20 +5,23 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//GuildCache Guilds
-var GuildCache []*discordgo.Guild
+var guildCache []*discordgo.Guild
 
-//Ready event
 func Ready(client *discordgo.Session, ready *discordgo.Ready) {
-	GuildCache = ready.Guilds
+	guildCache = ready.Guilds
 
 	client.UpdateStatusComplex(discordgo.UpdateStatusData{
 		Status: "online",
-		Game: &discordgo.Game{
-			Type: discordgo.GameTypeWatching,
-			Name: "for h]help",
+		Activities: []*discordgo.Activity{
+			{
+				Name: "the holidays!",
+				Type: discordgo.ActivityTypeWatching,
+			},
 		},
 	})
 
-	misc.Log("", "info", "start", nil, nil, "")
+	misc.Logger(misc.Log{
+		Group:    "info",
+		Subgroup: "ready",
+	})
 }

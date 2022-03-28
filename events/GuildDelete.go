@@ -6,23 +6,18 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//GuildDelete event
-func GuildDelete(client *discordgo.Session, guild *discordgo.GuildDelete) {
-	if guild.Guild.Unavailable {
+func GuildDelete(client *discordgo.Session, g *discordgo.GuildDelete) {
+	guild := g.Guild
+
+	if guild.Unavailable {
 		return
 	}
 
-	dbResult, err := db.GuildFetch(guild.Guild.ID)
-	if err != nil {
-		return
-	}
+	go db.DeleteGuild(guild.ID)
 
-	deletedGuild := &discordgo.Guild{
-		ID:   guild.Guild.ID,
-		Name: dbResult.Guildname,
-	}
-
-	db.DeleteGuild(guild.Guild)
-
-	misc.Log("", "info", "leave", nil, deletedGuild, "")
+	misc.Logger(misc.Log{
+		Group:    "info",
+		Subgroup: "leave",
+		Guild:    guild.ID,
+	})
 }

@@ -1,20 +1,15 @@
 package commands
 
-import "github.com/barkloaf/HolidayBot/db"
+import (
+	"github.com/barkloaf/HolidayBot/db"
+	"github.com/bwmarrin/discordgo"
+)
 
-func setCommand(p Params) bool {
-	var newCommand bool
-	switch p.Args[2] {
-	case "on", "true":
-		newCommand = true
-	case "off", "false":
-		newCommand = false
-	default:
-		Errors(p.Client, p.Message, p.Guild, "SYN", SetCommand)
-		return false
-	}
+func setCommand(client *discordgo.Session, interaction *discordgo.Interaction) error {
+	go db.UpdateCommand(
+		interaction.GuildID,
+		interaction.ApplicationCommandData().Options[0].Options[0].BoolValue(),
+	)
 
-	go db.UpdateDaily(p.Guild.ID, newCommand)
-
-	return true
+	return nil
 }

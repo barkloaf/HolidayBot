@@ -1,11 +1,11 @@
 package db
 
-import (
-	"github.com/bwmarrin/discordgo"
-	"gopkg.in/rethinkdb/rethinkdb-go.v6"
-)
+import "context"
 
-//DeleteGuild func
-func DeleteGuild(guild *discordgo.Guild) {
-	rethinkdb.DB("HolidayBot").Table("guilds").Get(guild.ID).Delete().RunWrite(conn)
+func DeleteGuild(id string) {
+	conn.Exec(
+		context.Background(),
+		"delete from guilds where id = $1",
+		id,
+	)
 }

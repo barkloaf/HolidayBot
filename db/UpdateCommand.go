@@ -1,12 +1,12 @@
 package db
 
-import (
-	"gopkg.in/rethinkdb/rethinkdb-go.v6"
-)
+import "context"
 
-//UpdateCommand func
-func UpdateCommand(guildID string, newCommand bool) {
-	rethinkdb.DB("HolidayBot").Table("guilds").Get(guildID).Update(map[string]interface{}{
-		"command": newCommand,
-	}).RunWrite(conn)
+func UpdateCommand(id string, newCmd bool) {
+	conn.Exec(
+		context.Background(),
+		"update guilds set command = $1 where id = $2",
+		newCmd,
+		id,
+	)
 }

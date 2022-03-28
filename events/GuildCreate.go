@@ -6,15 +6,20 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//GuildCreate event
-func GuildCreate(client *discordgo.Session, guild *discordgo.GuildCreate) {
-	for _, value := range GuildCache {
+func GuildCreate(client *discordgo.Session, g *discordgo.GuildCreate) {
+	guild := g.Guild
+
+	for _, value := range guildCache {
 		if guild.ID == value.ID {
 			return
 		}
 	}
 
-	db.CreateGuild(client, guild.Guild)
+	go db.InsertGuild(client, guild)
 
-	misc.Log("", "info", "join", nil, guild.Guild, "")
+	misc.Logger(misc.Log{
+		Group:    "info",
+		Subgroup: "join",
+		Guild:    guild.ID,
+	})
 }

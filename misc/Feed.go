@@ -7,7 +7,6 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-//Feed func
 func Feed(tz string, adult bool) ([]*discordgo.MessageEmbedField, error) {
 	var adultString string
 	if adult {

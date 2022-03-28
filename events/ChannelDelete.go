@@ -6,42 +6,39 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//ChannelDelete event
-func ChannelDelete(client *discordgo.Session, channel *discordgo.ChannelDelete) {
+func ChannelDelete(client *discordgo.Session, c *discordgo.ChannelDelete) {
+	channel := c.Channel
+
 	guild, err := client.Guild(channel.GuildID)
 	if err != nil || guild.ID == "" {
 		return
 	}
 
-	dbResult, err := db.GuildFetch(channel.GuildID)
+	dbResult, err := db.SelectGuild(guild.ID)
 	if err != nil {
 		return
 	}
-	if dbResult.Guildname == "" {
-		misc.Log("", "info", "misconfig", nil, guild, "")
-		dm, err := client.UserChannelCreate(guild.OwnerID)
-		if err == nil {
-			client.ChannelMessageSend(dm.ID, "There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
-		}
 
-		client.GuildLeave(guild.ID)
-		return
-	}
-
-	if channel.Channel.ID == dbResult.DailyChannel {
+	if channel.ID == dbResult.DailyChannel || dbResult.DailyChannel == "" {
 		newDC, err := misc.GetDefaultChannel(client, guild)
 		if err != nil {
-			misc.Log("", "info", "misconfig", nil, guild, "")
-			dm, err := client.UserChannelCreate(guild.OwnerID)
-			if err == nil {
-				client.ChannelMessageSend(dm.ID, "There is an error in your server config! This most likely means I have/had no permissions in any text channel. I automagically left the server but can be re-added once you fix your config. Thank you!")
+			if err.Error() != "no channels" {
+				misc.Logger(misc.Log{
+					Content: err.Error(),
+					Group:   "err",
+				})
 			}
 
-			client.GuildLeave(guild.ID)
-			return
+			newDC.ID = ""
 		}
 
-		db.UpdateDailyChannel(guild.ID, newDC.ID)
-		misc.Log(newDC.ID, "info", "channelDelete", nil, guild, "")
+		go db.UpdateDailyChannel(guild.ID, newDC.ID)
+
+		misc.Logger(misc.Log{
+			Content:  newDC.ID,
+			Group:    "info",
+			Subgroup: "channelDelete",
+			Guild:    guild.ID,
+		})
 	}
 }

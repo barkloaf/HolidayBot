@@ -1,12 +1,12 @@
 package db
 
-import (
-	"gopkg.in/rethinkdb/rethinkdb-go.v6"
-)
+import "context"
 
-//UpdateDaily func
-func UpdateDaily(guildID string, newDaily bool) {
-	rethinkdb.DB("HolidayBot").Table("guilds").Get(guildID).Update(map[string]interface{}{
-		"daily": newDaily,
-	}).RunWrite(conn)
+func UpdateDaily(id string, newDaily bool) {
+	conn.Exec(
+		context.Background(),
+		"update guilds set daily = $1 where id = $2",
+		newDaily,
+		id,
+	)
 }
