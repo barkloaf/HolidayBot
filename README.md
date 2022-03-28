@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://discordapp.com/api/oauth2/authorize?client_id=504508062929911869&permissions=67456064&scope=bot">
+    <a href="https://discord.com/api/oauth2/authorize?client_id=504508062929911869&permissions=19456&scope=bot%20applications.commands">
         <img src="https://wildcard.yiff.church/i/ovgxbdm4.png" />
     </a>
 </p>
