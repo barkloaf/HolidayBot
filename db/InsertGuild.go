@@ -17,7 +17,9 @@ func InsertGuild(client *discordgo.Session, guild *discordgo.Guild) {
 			})
 		}
 
-		defaultChannel.ID = ""
+		defaultChannel = &discordgo.Channel{
+			ID: "",
+		}
 	}
 
 	conn.Exec(
