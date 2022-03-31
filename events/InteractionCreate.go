@@ -47,7 +47,9 @@ func InteractionCreate(client *discordgo.Session, i *discordgo.InteractionCreate
 					})
 				}
 
-				newDC.ID = ""
+				newDC = &discordgo.Channel{
+					ID: "",
+				}
 			}
 
 			db.UpdateDailyChannel(guild.ID, newDC.ID)
