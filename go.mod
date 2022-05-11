@@ -1,9 +1,9 @@
 module github.com/barkloaf/HolidayBot
 
-go 1.17
+go 1.18
 
 require (
-	github.com/Knetic/govaluate v3.0.0+incompatible
+	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 	github.com/bwmarrin/discordgo v0.23.3-0.20220216202327-6015eed9333e
 	github.com/jackc/pgx/v4 v4.15.0
 	github.com/joho/godotenv v1.4.0
