@@ -29,7 +29,9 @@ func ChannelDelete(client *discordgo.Session, c *discordgo.ChannelDelete) {
 				})
 			}
 
-			newDC.ID = ""
+			newDC = &discordgo.Channel{
+				ID: "",
+			}
 		}
 
 		go db.UpdateDailyChannel(guild.ID, newDC.ID)
