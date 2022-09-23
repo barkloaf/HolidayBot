@@ -28,12 +28,11 @@
 
 
 ## Pictures/Examples
-![Image](https://i.barkloaf.com/f4w1vHErm.png "command")
-![Image](https://i.barkloaf.com/diHNBIwfe.png "daily")
+![Image](https://i.barkloaf.com/0I9LmX1pC.png "command")
+![Image](https://i.barkloaf.com/Qut612eFI.png "daily")
 
 ## Terms of Service and Privacy Policy
 HolidayBot's Terms of Service and Privacy Policy are contained in `TERMS.md` and `PRIVACY.md` respectively.
 
 ## Disclaimer
-Holidays listed are largely US and international only, no matter which timezone the holidays are displayed in, only the timezone makes the difference. This is nothing I can really control, as there lacks a good holiday database I can use like this. However, every holiday listed is legally recognized by *someone*.
-#### But hey, the world is so globalized now, does it really matter?
+Holidays listed are largely US and international only, no matter which timezone the holidays are displayed in. This is nothing I can really control, as there lacks a good holiday database suitable for the fun-oriented purposes HolidayBot is designed to serve. However, every holiday listed is legally recognized by *someone*.

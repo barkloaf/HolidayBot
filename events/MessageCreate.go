@@ -90,8 +90,15 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if len(output) > 1018 {
 		arrayized := strings.Split(output, " ")
-		client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[:len(arrayized)/2], " "))
-		client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/2)+1:], " "))
+		msg, _ := client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[:len(arrayized)/4], " "))
+		if msg != nil {
+			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/4)+1:len(arrayized)/2], " "))
+			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/2)+1:(3*(len(arrayized)/4))], " "))
+			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(3*(len(arrayized)/4))+1:], " "))
+		} else {
+			fmt.Printf("\n%v\n", output)
+		}
+
 		output = "overflow"
 	}
 
