@@ -35,4 +35,4 @@
 HolidayBot's Terms of Service and Privacy Policy are contained in `TERMS.md` and `PRIVACY.md` respectively.
 
 ## Disclaimer
-Holidays listed are largely US and international only, no matter which timezone the holidays are displayed in. This is nothing I can really control, as there lacks a good holiday database suitable for the fun-oriented purposes HolidayBot is designed to serve. However, every holiday listed is legally recognized by *someone*.
+Holidays listed are largely US and international only, no matter which timezone the holidays are displayed in. This is nothing I can really control, as there lacks a good holiday database suitable for the fun-oriented purposes HolidayBot is designed to serve. Furthermore, neither HolidayBot nor its creator endorse any of the holidays the bot will display.
