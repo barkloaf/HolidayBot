@@ -42,7 +42,7 @@ func H(client *discordgo.Session, interaction *discordgo.Interaction) error {
 			client.InteractionRespond(interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Flags: uint64(discordgo.MessageFlagsEphemeral),
+					Flags: discordgo.MessageFlagsEphemeral,
 					Embeds: []*discordgo.MessageEmbed{
 						{
 							Author: &discordgo.MessageEmbedAuthor{
@@ -77,7 +77,7 @@ func H(client *discordgo.Session, interaction *discordgo.Interaction) error {
 		client.InteractionRespond(interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Flags: uint64(discordgo.MessageFlagsEphemeral),
+				Flags: discordgo.MessageFlagsEphemeral,
 				Embeds: []*discordgo.MessageEmbed{
 					{
 						Author: &discordgo.MessageEmbedAuthor{

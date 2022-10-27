@@ -78,7 +78,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 			title = "❌ Runtime Error!"
 			succ = false
 		} else {
-			output = fmt.Sprint(data)
+			output = strings.Replace(fmt.Sprint(data), misc.Config.Token, "REDACTED", -1)
 			title = "✅ Eval Successful!"
 			succ = true
 		}
@@ -90,6 +90,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if len(output) > 1018 {
 		arrayized := strings.Split(output, " ")
+
 		msg, _ := client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[:len(arrayized)/4], " "))
 		if msg != nil {
 			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/4)+1:len(arrayized)/2], " "))
