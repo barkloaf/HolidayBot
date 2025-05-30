@@ -1,16 +1,16 @@
 package misc
 
 import (
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
-var dir = "./zoneinfo/"
+var dir = Config.Zones
 
 var Zones []string
 
 func readZones(path string) {
-	files, _ := ioutil.ReadDir(dir + path)
+	files, _ := os.ReadDir(dir + path)
 	for _, f := range files {
 		if f.Name() != strings.ToUpper(f.Name()[:1])+f.Name()[1:] {
 			continue
@@ -18,6 +18,10 @@ func readZones(path string) {
 		if f.IsDir() {
 			readZones(path + "/" + f.Name())
 		} else {
+			if strings.Contains(f.Name(), ".") {
+				continue
+			}
+
 			Zones = append(Zones, (path + "/" + f.Name())[1:])
 		}
 	}

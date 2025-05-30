@@ -15,7 +15,7 @@ import (
 func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	message := m.Message
 
-	if message.Author.ID != misc.Config.OwnerID {
+	if message.Author.ID != misc.Config.OwnerId {
 		return
 	}
 

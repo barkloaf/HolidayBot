@@ -29,7 +29,7 @@ func Set(client *discordgo.Session, interaction *discordgo.Interaction) error {
 		return errors.New("")
 	}
 
-	if interaction.Member.Permissions&discordgo.PermissionManageServer != discordgo.PermissionManageServer {
+	if interaction.Member.Permissions&discordgo.PermissionManageGuild != discordgo.PermissionManageGuild {
 		client.InteractionRespond(interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{

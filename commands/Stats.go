@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/barkloaf/HolidayBot/db"
 	"github.com/barkloaf/HolidayBot/misc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -16,6 +17,19 @@ func Stats(client *discordgo.Session, interaction *discordgo.Interaction) error 
 	var memory runtime.MemStats
 	runtime.ReadMemStats(&memory)
 	usage := float64(memory.HeapInuse+memory.StackInuse+memory.MSpanInuse+memory.MCacheInuse) / math.Pow(2, 20)
+
+	var shardStr string
+	if misc.Config.Sharding {
+		shardStr = " (shard " + strconv.Itoa(misc.Config.ShardId) + ")"
+	}
+
+	var totalGuilds string
+	num, err := db.SelectNumberOfGuilds()
+	if err != nil {
+		totalGuilds = "NaN"
+	} else {
+		totalGuilds = strconv.Itoa(num)
+	}
 
 	regex := regexp.MustCompilePOSIX("[hms]")
 	uptimeString := time.Since(misc.Config.StartTime).String()
@@ -60,11 +74,11 @@ func Stats(client *discordgo.Session, interaction *discordgo.Interaction) error 
 						},
 						{
 							Name:   "# of guilds:",
-							Value:  strconv.FormatInt(int64(len(client.State.Guilds)), 10),
+							Value:  totalGuilds,
 							Inline: false,
 						},
 						{
-							Name:   "Memory usage:",
+							Name:   "Memory usage" + shardStr + ":",
 							Value:  strconv.FormatFloat(usage, 'f', 2, 64) + " MiB",
 							Inline: false,
 						},

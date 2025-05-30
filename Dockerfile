@@ -13,7 +13,6 @@ COPY commands commands
 COPY db db
 COPY events events
 COPY misc misc
-COPY zoneinfo zoneinfo
 
 RUN go build
 ENTRYPOINT ["./HolidayBot"]

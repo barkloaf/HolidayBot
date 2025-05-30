@@ -45,7 +45,7 @@ func Settings(client *discordgo.Session, interaction *discordgo.Interaction) err
 					Color: misc.Config.UseColor,
 					Title: "Current guild settings for " + guild.Name,
 					Thumbnail: &discordgo.MessageEmbedThumbnail{
-						URL: guild.IconURL(),
+						URL: guild.IconURL("512"),
 					},
 					Fields: []*discordgo.MessageEmbedField{
 						{

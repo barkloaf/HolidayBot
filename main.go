@@ -36,6 +36,10 @@ func main() {
 		client.AddHandler(handler)
 	}
 
+	if misc.Config.Sharding {
+		client.Identify.Shard = &[2]int{misc.Config.ShardId, misc.Config.ShardCount}
+	}
+
 	err = client.Open()
 	if err != nil {
 		log.Fatalf("Cannot open the session: %v", err)
