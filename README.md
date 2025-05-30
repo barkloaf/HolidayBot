@@ -1,13 +1,11 @@
 <p align="center">
     <a href="https://discord.com/api/oauth2/authorize?client_id=504508062929911869&permissions=19456&scope=bot%20applications.commands">
-        <img src="https://wildcard.yiff.church/i/ovgxbdm4.png" />
+        <img src="invite.png" />
     </a>
 </p>
 
 # <p align="center">HolidayBot</p>
 <p align="center">A discord bot created with <a href="https://github.com/bwmarrin/discordgo">DiscordGo</a> that spits out real holidays that you may have never heard of before. All holidays are grabbed from <a href="https://checkiday.com">Checkiday</a></p>
-<p align="center">
-  <img src="https://top.gg/api/widget/status/504508062929911869.svg" alt="HolidayBot" /></p>
 
 ### <p align="center">Vote for HolidayBot on [Top.gg!](https://top.gg/bot/504508062929911869/vote)</p>
 

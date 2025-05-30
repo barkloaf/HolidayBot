@@ -72,17 +72,19 @@ func init() {
 	}
 	Config.Sharding = sding
 
-	sc, err := strconv.Atoi(getEnv("SHARD_COUNT"))
-	if err != nil {
-		panic("Invalid SHARD_COUNT")
-	}
-	Config.ShardCount = sc
+	if Config.Sharding {
+		sc, err := strconv.Atoi(getEnv("SHARD_COUNT"))
+		if err != nil {
+			panic("Invalid SHARD_COUNT")
+		}
+		Config.ShardCount = sc
 
-	sid, err := strconv.Atoi(getEnv("SHARD_ID"))
-	if err != nil {
-		panic("Invalid SHARD_ID")
+		sid, err := strconv.Atoi(getEnv("SHARD_ID"))
+		if err != nil {
+			panic("Invalid SHARD_ID")
+		}
+		Config.ShardId = sid
 	}
-	Config.ShardId = sid
 
 	Config.StartTime = time.Now()
 }
