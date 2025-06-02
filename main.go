@@ -25,7 +25,7 @@ func main() {
 		log.Fatalf("Client creation Error: %v", err)
 	}
 
-	for _, handler := range []interface{}{
+	for _, handler := range []any{
 		events.ChannelDelete,
 		events.GuildCreate,
 		events.GuildDelete,

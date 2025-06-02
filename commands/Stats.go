@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"math"
 	"regexp"
 	"runtime"
@@ -8,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/barkloaf/HolidayBot/db"
 	"github.com/barkloaf/HolidayBot/misc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -24,11 +24,20 @@ func Stats(client *discordgo.Session, interaction *discordgo.Interaction) error 
 	}
 
 	var totalGuilds string
-	num, err := db.SelectNumberOfGuilds()
+	res, err := client.Request("GET", "https://discord.com/api/v9/applications/@me", nil)
+	if err != nil {
+		totalGuilds = "NaN"
+	}
+
+	var result struct {
+		GuildCount int `json:"approximate_guild_count"`
+	}
+
+	err = json.Unmarshal(res, &result)
 	if err != nil {
 		totalGuilds = "NaN"
 	} else {
-		totalGuilds = strconv.Itoa(num)
+		totalGuilds = strconv.Itoa(result.GuildCount)
 	}
 
 	regex := regexp.MustCompilePOSIX("[hms]")

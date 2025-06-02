@@ -9,7 +9,7 @@ import (
 	"github.com/barkloaf/HolidayBot/misc"
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/Knetic/govaluate"
+	"github.com/expr-lang/expr"
 )
 
 func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
@@ -46,9 +46,17 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		dbResult, _ = db.SelectGuild(message.GuildID)
 	}
 
-	functions := map[string]govaluate.ExpressionFunction{
-		"selectGuild": func(args ...interface{}) (interface{}, error) {
+	env := map[string]any{
+		"client":   client,
+		"message":  message,
+		"guild":    guild,
+		"dbResult": dbResult,
+		"memory":   memory,
+		"selectGuild": func(args ...any) (any, error) {
 			return db.SelectGuild(args[0].(string))
+		},
+		"selectNumberOfGuilds": func(args ...any) (any, error) {
+			return db.SelectNumberOfGuilds()
 		},
 	}
 
@@ -58,25 +66,19 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		succ   bool
 	)
 
-	expr, compErr := govaluate.NewEvaluableExpressionWithFunctions(input, functions)
+	expression, compErr := expr.Compile(input, expr.Env(env))
 	if compErr != nil {
 		output = compErr.Error()
 		title = "❌ Compiler Error!"
 		succ = false
-	} else {
-		params := map[string]interface{}{
-			"client":   client,
-			"message":  message,
-			"guild":    guild,
-			"dbResult": dbResult,
-			"memory":   memory,
-		}
 
-		data, rtErr := expr.Evaluate(params)
+	} else {
+		data, rtErr := expr.Run(expression, env)
 		if rtErr != nil {
 			output = rtErr.Error()
 			title = "❌ Runtime Error!"
 			succ = false
+
 		} else {
 			output = strings.Replace(fmt.Sprint(data), misc.Config.Token, "REDACTED", -1)
 			title = "✅ Eval Successful!"

@@ -3,8 +3,8 @@ module github.com/barkloaf/HolidayBot
 go 1.24.3
 
 require (
-	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 	github.com/bwmarrin/discordgo v0.29.0
+	github.com/expr-lang/expr v1.17.4
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lithammer/fuzzysearch v1.1.8

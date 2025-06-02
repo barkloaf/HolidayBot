@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/barkloaf/HolidayBot/db"
@@ -19,9 +20,29 @@ func dailyPosting(client *discordgo.Session) {
 		gocron.AddFunc("CRON_TZ="+tz+" 0 0 * * *", func() {
 			time.Sleep(5 * time.Second)
 
-			guilds, err := db.SelectGuildsTz(tz)
+			dbGuilds, err := db.SelectGuildsTz(tz)
 			if err != nil {
 				return
+			}
+
+			if len(dbGuilds) == 0 {
+				return
+			}
+
+			var guilds []db.Guild
+			for _, currGuild := range dbGuilds {
+				if misc.Config.Sharding {
+					id, err := strconv.Atoi(currGuild.ID)
+					if err != nil {
+						continue
+					}
+
+					if ((id >> 22) % misc.Config.ShardCount) != misc.Config.ShardId {
+						continue
+					}
+				}
+
+				guilds = append(guilds, currGuild)
 			}
 
 			if len(guilds) == 0 {
