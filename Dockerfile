@@ -19,7 +19,7 @@ COPY misc misc
 RUN go build
 ENTRYPOINT ["./HolidayBot"]
 
-HEALTHCHECK --interval=30s --timeout=8s --start-period=10s --retries=2 CMD { \
+HEALTHCHECK --interval=30s --timeout=8s --start-period=120s --retries=2 CMD { \
     RESPONSE=$( curl -s http://localhost:8080/healthcheck ); \
     \
     HEALTHY=$( echo "$RESPONSE" | jq -r '.healthy' ); \
