@@ -27,10 +27,10 @@ HEALTHCHECK --interval=30s --timeout=8s --start-period=10s --retries=2 CMD { \
     \
     if [ "$HEALTHY" != "true" ]; then \
         ERROR_MSG=$( echo "$RESPONSE" | jq -r '.error' ); \
-        echo "$ERROR_MSG"; \
+        echo -n "$ERROR_MSG"; \
         exit 1; \
     fi; \
     \
-    echo "$LATENCY" \
+    echo -n "$LATENCY"; \
     exit 0; \
 }

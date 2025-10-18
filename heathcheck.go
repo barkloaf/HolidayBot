@@ -64,5 +64,5 @@ func healthcheck(c *discordgo.Session) {
 		}
 	}(c))
 
-	go http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", nil)
 }
