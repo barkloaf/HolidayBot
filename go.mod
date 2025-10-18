@@ -1,16 +1,18 @@
 module github.com/barkloaf/HolidayBot
 
-go 1.24.3
+go 1.25.3
 
 require (
-	github.com/bwmarrin/discordgo v0.29.0
-	github.com/expr-lang/expr v1.17.4
+	github.com/bwmarrin/discordgo v0.29.1
+	github.com/expr-lang/expr v1.17.6
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/robfig/cron/v3 v3.0.1
 )
+
+replace github.com/bwmarrin/discordgo => github.com/estr0gen/discordgo v0.29.1-0.20250825044531-8be61c2bf7e5
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3 // indirect
@@ -28,8 +30,8 @@ require (
 	github.com/mmcdole/goxpp v1.1.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/crypto v0.43.0 // indirect
+	golang.org/x/net v0.46.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 )

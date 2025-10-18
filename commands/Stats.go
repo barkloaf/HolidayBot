@@ -24,7 +24,7 @@ func Stats(client *discordgo.Session, interaction *discordgo.Interaction) error 
 	}
 
 	var totalGuilds string
-	res, err := client.Request("GET", "https://discord.com/api/v9/applications/@me", nil)
+	res, err := client.Request("GET", discordgo.EndpointAPI+"applications/@me", nil)
 	if err != nil {
 		totalGuilds = "NaN"
 	}

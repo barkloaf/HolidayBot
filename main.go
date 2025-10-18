@@ -56,6 +56,7 @@ func main() {
 	}
 
 	dailyPosting(client)
+	healthcheck(client)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
