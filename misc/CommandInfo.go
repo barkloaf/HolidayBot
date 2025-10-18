@@ -1,8 +1,8 @@
-package main
+package misc
 
 import "github.com/bwmarrin/discordgo"
 
-var commandInfo = []*discordgo.ApplicationCommand{
+var CommandInfo = []*discordgo.ApplicationCommand{
 	{
 		Name:        "about",
 		Description: "Shows information about the bot (invite, voting, source, purpose, author, etc.).",

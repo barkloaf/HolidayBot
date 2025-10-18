@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/barkloaf/HolidayBot/appliances"
 	"github.com/barkloaf/HolidayBot/db"
 	"github.com/barkloaf/HolidayBot/events"
 	"github.com/barkloaf/HolidayBot/misc"
@@ -48,15 +49,19 @@ func main() {
 	defer client.Close()
 	defer connection.Close()
 
-	for _, cmd := range commandInfo {
+	for _, cmd := range misc.CommandInfo {
 		_, err := client.ApplicationCommandCreate(client.State.User.ID, "", cmd)
 		if err != nil {
 			log.Panicf("Cannot create '%v' command: %v", cmd.Name, err)
 		}
 	}
 
-	go dailyPosting(client)
-	go healthcheck(client)
+	for _, appliance := range []func(*discordgo.Session){
+		appliances.DailyPosting,
+		appliances.Healthcheck,
+	} {
+		go appliance(client)
+	}
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

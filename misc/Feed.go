@@ -14,7 +14,7 @@ func Feed(tz string, adult bool) ([]*discordgo.MessageEmbedField, error) {
 	}
 
 	parser := gofeed.NewParser()
-	feed, err := parser.ParseURL("https://api.checkiday.com/rss.php?tz=" + tz + adultString)
+	feed, err := parser.ParseURL("https://api.checkiday.com/rss?tz=" + tz + adultString)
 	if err != nil {
 		return nil, err
 	}

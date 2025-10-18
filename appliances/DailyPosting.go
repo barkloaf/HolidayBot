@@ -1,4 +1,4 @@
-package main
+package appliances
 
 import (
 	"strconv"
@@ -11,7 +11,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func dailyPosting(client *discordgo.Session) {
+func DailyPosting(client *discordgo.Session) {
 	gocron := cron.New()
 
 	for _, currTz := range misc.Zones {

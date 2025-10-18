@@ -1,4 +1,4 @@
-package main
+package appliances
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ type health struct {
 	ErrorMsg string  `json:"error"`
 }
 
-func healthcheck(c *discordgo.Session) {
+func Healthcheck(c *discordgo.Session) {
 	http.HandleFunc("GET /healthcheck", func(client *discordgo.Session) func(http.ResponseWriter, *http.Request) {
 		return func(writer http.ResponseWriter, request *http.Request) {
 			var hcheck *health
