@@ -11,6 +11,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY *.go ./
+COPY appliances appliances
 COPY commands commands
 COPY db db
 COPY events events
