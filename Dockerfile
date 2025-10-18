@@ -4,6 +4,7 @@ WORKDIR /src
 
 RUN apk add --no-cache tzdata
 RUN apk add --no-cache jq
+RUN apk add --no-cache curl
 
 COPY go.mod .
 COPY go.sum .
