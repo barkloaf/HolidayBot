@@ -19,7 +19,10 @@ type health struct {
 func Healthcheck(c *discordgo.Session) {
 	http.HandleFunc("GET /healthcheck", func(client *discordgo.Session) func(http.ResponseWriter, *http.Request) {
 		return func(writer http.ResponseWriter, request *http.Request) {
-			var hcheck *health
+			latencyms := math.Round(.0001*float64(client.HeartbeatLatency())) / 100
+			hcheck := health{
+				Latency: latencyms,
+			}
 
 			check := make(chan error, 1)
 			go func() {
@@ -31,9 +34,10 @@ func Healthcheck(c *discordgo.Session) {
 
 			select {
 			case result := <-check:
-				hcheck = &health{
-					Healthy: result == nil,
-					Latency: math.Round(.0001*float64(client.HeartbeatLatency())) / 100,
+				hcheck.Healthy = (result == nil)
+
+				if latencyms > 6000 {
+					hcheck.Healthy = false
 				}
 
 				if result != nil {
@@ -41,11 +45,8 @@ func Healthcheck(c *discordgo.Session) {
 				}
 
 			case <-time.After(6 * time.Second):
-				hcheck = &health{
-					Healthy:  false,
-					Latency:  math.Inf(1),
-					ErrorMsg: "Request timed out",
-				}
+				hcheck.Healthy = false
+				hcheck.ErrorMsg = "Request timed out"
 			}
 
 			jsonData, err := json.Marshal(hcheck)
