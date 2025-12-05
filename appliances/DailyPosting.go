@@ -1,6 +1,8 @@
 package appliances
 
 import (
+	"fmt"
+	"runtime/debug"
 	"strconv"
 	"time"
 
@@ -18,6 +20,13 @@ func DailyPosting(client *discordgo.Session) {
 		tz := currTz
 
 		gocron.AddFunc("CRON_TZ="+tz+" 0 0 * * *", func() {
+			defer func() {
+				rec := recover()
+				if rec != nil {
+					fmt.Printf("\n------\n%v\n------\n", debug.Stack())
+				}
+			}()
+
 			time.Sleep(5 * time.Second)
 
 			dbGuilds, err := db.SelectGuildsTz(tz)

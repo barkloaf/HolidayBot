@@ -13,6 +13,8 @@ func GuildDelete(client *discordgo.Session, g *discordgo.GuildDelete) {
 		return
 	}
 
+	defer eventRecover()
+
 	if guild.Unavailable {
 		return
 	}

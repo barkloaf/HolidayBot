@@ -23,6 +23,8 @@ func InteractionCreate(client *discordgo.Session, i *discordgo.InteractionCreate
 		return
 	}
 
+	defer eventRecover()
+
 	name := interaction.ApplicationCommandData().Name
 
 	fn, exists := commandMap[name]

@@ -13,6 +13,8 @@ func ChannelDelete(client *discordgo.Session, c *discordgo.ChannelDelete) {
 		return
 	}
 
+	defer eventRecover()
+
 	guild, err := client.Guild(channel.GuildID)
 	if err != nil || guild.ID == "" {
 		return

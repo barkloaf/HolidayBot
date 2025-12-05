@@ -13,6 +13,8 @@ func GuildCreate(client *discordgo.Session, g *discordgo.GuildCreate) {
 		return
 	}
 
+	defer eventRecover()
+
 	for _, value := range guildCache {
 		if guild.ID == value.ID {
 			return

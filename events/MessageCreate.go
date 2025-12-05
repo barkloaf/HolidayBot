@@ -19,6 +19,8 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	defer eventRecover()
+
 	if message.Author.ID != misc.Config.OwnerId {
 		return
 	}
@@ -103,7 +105,7 @@ func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(len(arrayized)/2)+1:(3*(len(arrayized)/4))], " "))
 			client.ChannelMessageSend(message.ChannelID, strings.Join(arrayized[(3*(len(arrayized)/4))+1:], " "))
 		} else {
-			fmt.Printf("\n%v\n", output)
+			fmt.Printf("\n------\n%v\n------\n", output)
 		}
 
 		output = "overflow"
