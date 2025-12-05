@@ -9,6 +9,10 @@ import (
 func ChannelDelete(client *discordgo.Session, c *discordgo.ChannelDelete) {
 	channel := c.Channel
 
+	if channel == nil {
+		return
+	}
+
 	guild, err := client.Guild(channel.GuildID)
 	if err != nil || guild.ID == "" {
 		return

@@ -19,6 +19,10 @@ var commandMap = map[string]func(client *discordgo.Session, interaction *discord
 func InteractionCreate(client *discordgo.Session, i *discordgo.InteractionCreate) {
 	interaction := i.Interaction
 
+	if interaction == nil {
+		return
+	}
+
 	name := interaction.ApplicationCommandData().Name
 
 	fn, exists := commandMap[name]

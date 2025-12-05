@@ -15,6 +15,10 @@ import (
 func MessageCreate(client *discordgo.Session, m *discordgo.MessageCreate) {
 	message := m.Message
 
+	if message == nil {
+		return
+	}
+
 	if message.Author.ID != misc.Config.OwnerId {
 		return
 	}

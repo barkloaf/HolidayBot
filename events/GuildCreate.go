@@ -9,6 +9,10 @@ import (
 func GuildCreate(client *discordgo.Session, g *discordgo.GuildCreate) {
 	guild := g.Guild
 
+	if guild == nil {
+		return
+	}
+
 	for _, value := range guildCache {
 		if guild.ID == value.ID {
 			return
