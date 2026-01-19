@@ -36,7 +36,7 @@ func Healthcheck(c *discordgo.Session) {
 			case result := <-check:
 				hcheck.Healthy = (result == nil)
 
-				if latencyms > 6000 {
+				if latencyms > 6000 || (time.Since(client.LastHeartbeatAck) > (time.Minute * 3)) {
 					hcheck.Healthy = false
 				}
 
