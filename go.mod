@@ -4,7 +4,7 @@ go 1.25.3
 
 require (
 	github.com/bwmarrin/discordgo v0.29.1
-	github.com/expr-lang/expr v1.17.6
+	github.com/expr-lang/expr v1.17.7
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lithammer/fuzzysearch v1.1.8
